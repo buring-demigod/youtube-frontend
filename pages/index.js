@@ -1,6 +1,5 @@
 import { Stack, useMediaQuery } from "@mui/material";
 import Slider from "@/components/Slider";
-import Drawer from '@/components/Drawer';
 import Feed from "@/components/Feed";
 import { useState } from "react";
 import { makeStyles } from "@mui/styles";
@@ -18,12 +17,12 @@ const useStyles = makeStyles((theme) => (
       },
     }
   }
-))
+));
 
-const Home = ({ loadedVideos, loadedSubscriptions, loadedUser, errorStatus }) => {
+const Home = ({ loadedVideos, loadedSubscriptions, loadedUser, nextPageToken, errorStatus }) => {
   const classes = useStyles();
   const [activeButton, setActiveButton] = useState('All');
-  const { handleVideos, handleSubscriptions, handleUser, drawer } = useMainContext();
+  const { handleVideos, handleSubscriptions, handleUser, drawer, setVideoToken } = useMainContext();
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
 
   useEffect(() => {
@@ -32,8 +31,8 @@ const Home = ({ loadedVideos, loadedSubscriptions, loadedUser, errorStatus }) =>
     }
     handleUser(loadedUser);
     handleVideos(loadedVideos);
+    setVideoToken(nextPageToken);
     handleSubscriptions(loadedSubscriptions);
-
   }, [loadedVideos, loadedSubscriptions, loadedUser]);
 
   const handleClick = async (item) => {
@@ -43,9 +42,9 @@ const Home = ({ loadedVideos, loadedSubscriptions, loadedUser, errorStatus }) =>
         query: item === 'All' ? null : item,
       }
     });
-    loadedVideos = videosResponse.data;
     setActiveButton(item);
-    handleVideos(loadedVideos);
+    setVideoToken(videosResponse.data.nextPageToken);
+    handleVideos(videosResponse.data.videos);
   }
 
   return (
@@ -58,7 +57,7 @@ const Home = ({ loadedVideos, loadedSubscriptions, loadedUser, errorStatus }) =>
     >
       <Slider active={activeButton} handleClick={handleClick} boxShadow='0px 0px 8px 30px white'
         height='85%' />
-      <Feed />
+      <Feed activeButton={activeButton} />
       {
         drawer && belowBreakPointD &&
         <div style={{ width: '100vw', height: '100vh', position: 'fixed', top: '0px', left: '0px', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: '1' }} />
@@ -69,13 +68,15 @@ const Home = ({ loadedVideos, loadedSubscriptions, loadedUser, errorStatus }) =>
 
 export async function getServerSideProps(context) {
   let loadedVideos = [];
+  let nextPageToken = null;
   let loadedSubscriptions = null;
   let loadedUser = { name: '', email: '', picture: '' };
   let errorStatus = null;
 
   try {
     const videosResponse = await axios.get('http://localhost:3001/videos');
-    loadedVideos = videosResponse.data;
+    loadedVideos = videosResponse.data.videos;
+    nextPageToken = videosResponse.data.nextPageToken;
   } catch (error) {
     loadedVideos = [];
   }
@@ -101,7 +102,7 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: { loadedVideos, loadedSubscriptions, loadedUser, errorStatus },
+    props: { loadedVideos, loadedSubscriptions, loadedUser, nextPageToken, errorStatus, },
   };
 }
 

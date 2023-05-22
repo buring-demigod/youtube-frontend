@@ -129,6 +129,7 @@ const NavMain = () => {
 const NavSearch = ({ inputStyles, IconStyles, handleOpen }) => {
 
   const [searchValue, setSearchValue] = useState('');
+  const [transcript, setTranscript] = useState('');
   const belowBreakPointI = useMediaQuery((theme) => theme.breakpoints.down('i'));
   const router = useRouter();
   const { handleVideos } = useMainContext();
@@ -140,6 +141,18 @@ const NavSearch = ({ inputStyles, IconStyles, handleOpen }) => {
       pathname: '/results',
       query: { search_query: searchValue }
     });
+  }
+
+  const handleVoiceInput = () => {
+    const recognition = new window.webkitSpeechRecognition();
+
+    recognition.onresult = (event) => {
+
+      const transcript = event.results[0][0].transcript;
+      console.log(transcript);
+    };
+
+    recognition.start();
   }
 
   const classes = useStyles();
@@ -161,7 +174,7 @@ const NavSearch = ({ inputStyles, IconStyles, handleOpen }) => {
           <SearchIcon />
         </IconButton>
       </div>
-      <IconButton >
+      <IconButton onClick={handleVoiceInput}>
         <MicIcon sx={{ color: 'black' }} />
       </IconButton>
     </Stack>
@@ -200,9 +213,9 @@ const SmNavSearch = ({ handleClose }) => {
   )
 }
 
-const Navbar = ({ client }) => {
+const Navbar = () => {
   const classes = useStyles();
-  const [searchOpen, setSearchOpen] = useState(true);
+  const [searchOpen, setSearchOpen] = useState(false);
   const belowBreakPointI = useMediaQuery((theme) => theme.breakpoints.down('i'));
 
   const handleClose = () => {

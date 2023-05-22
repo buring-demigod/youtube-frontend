@@ -3,6 +3,8 @@ import React from 'react';
 import { makeStyles } from "@mui/styles";
 import VideoCard from './VideoCard';
 import { useRouter } from 'next/router';
+import formatTime from '@/utils/functions/formatTime';
+import { useMainContext } from '@/context/createMainContext';
 
 const useStyles = makeStyles((theme) => (
   {
@@ -49,7 +51,7 @@ const useStyles = makeStyles((theme) => (
       marginTop: '35px',
       overflowY: 'scroll',
       '&::-webkit-scrollbar': {
-        width: '5px',
+        width: '7px',
         height: '5px',
         top: '0px',
         right: '0px',
@@ -81,7 +83,7 @@ const LeftContent = ({ thumbnail, title, videoId, handleClick }) => {
   );
 }
 
-const ItemCard = ({ thumbnail, title, views, channelTitle, videoId, handleClick }) => {
+const ItemCard = ({ thumbnail, title, time, channelTitle, videoId, handleClick }) => {
   const classes = useStyles();
   return (
     <Card className={classes.itemCard} onClick={() => handleClick(videoId)}>
@@ -93,7 +95,7 @@ const ItemCard = ({ thumbnail, title, views, channelTitle, videoId, handleClick 
       <CardContent className={classes.itemContent}>
         <Stack spacing={1} alignItems="start">
           <Typography>{title}</Typography>
-          <Typography fontSize={12} color="gray">{channelTitle}</Typography>
+          <Typography fontSize={12} color="gray">{channelTitle} .{formatTime(time)}</Typography>
         </Stack>
       </CardContent>
     </Card>
@@ -103,8 +105,10 @@ const ItemCard = ({ thumbnail, title, views, channelTitle, videoId, handleClick 
 const Playlist = ({ videos }) => {
   const classes = useStyles();
   const router = useRouter();
+  const { setDrawer } = useMainContext();
 
   const handleClick = (videoId) => {
+    setDrawer(false);
     router.push({ pathname: '/watch', query: { v: videoId } })
   }
 
@@ -123,11 +127,12 @@ const Playlist = ({ videos }) => {
           {videos.map((video, index) => {
             return (
               <Stack key={index} direction="row" spacing={2} alignItems="center">
-                <Typography fontSize={15} >{index}</Typography>
+                <Typography fontSize={15} >{index + 1}</Typography>
                 <ItemCard
                   key={index}
-                  thumbnail={video.snippet.thumbnails.high.url}
+                  thumbnail={video.snippet.thumbnails.maxres?.url || video.snippet.thumbnails.high?.url || video.snippet.thumbnails.standard?.url || video.snippet.thumbnails.default?.url}
                   title={video.snippet.title}
+                  time={video.snippet.publishedAt}
                   channelTitle={video.snippet.videoOwnerChannelTitle}
                   videoId={video.snippet.resourceId.videoId}
                   handleClick={handleClick}

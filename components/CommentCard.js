@@ -6,6 +6,7 @@ import { makeStyles } from '@mui/styles';
 //Icons
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import formatTime from '@/utils/functions/formatTime';
 
 const useStyles = makeStyles((theme) => (
   {
@@ -33,7 +34,7 @@ const CommentCard = ({ profilePicture, userName, content, likeCount, time }) => 
       <Stack className={classes.comment} spacing={1} alignItems="start">
         <Stack direction="row" spacing={1} alignItems="baseline">
           <Typography fontSize={13} fontWeight={500}>{userName} </Typography>
-          <Typography fontSize={11} color='gray'>{time}</Typography>
+          <Typography fontSize={11} color='gray'>{formatTime(time)}</Typography>
         </Stack>
 
         <Typography fontSize={13}>{content}</Typography>

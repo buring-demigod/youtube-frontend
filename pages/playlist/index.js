@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from "@mui/styles";
 import Playlist from '@/components/Playlist';
 import HandleTokenExpire from '@/utils/functions/handleTokenExpire';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => (
   {
@@ -25,15 +26,12 @@ const Index = ({ loadedPlaylistVideos, loadedUser, loadedSubscriptions, errorSta
   const { drawer, handleUser, handleSubscriptions } = useMainContext();
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
 
-
+  console.log(playlist);
   useEffect(() => {
-    if (errorStatus === 'token expired') {
-      HandleTokenExpire();
-    }
     handleUser(loadedUser);
     handleSubscriptions(loadedSubscriptions);
 
-  }, [loadedSubscriptions, loadedUser]);
+  }, [loadedUser, loadedSubscriptions]);
 
   return (
     <Stack
@@ -44,7 +42,7 @@ const Index = ({ loadedPlaylistVideos, loadedUser, loadedSubscriptions, errorSta
       sx={{ width: drawer ? 'calc(100vw - 270px)' : 'calc(100vw - 120px)', }}
     >
       {playlist.length > 0 && <Playlist videos={playlist} />}
-      {/* {loadedUser.name === '' && <Typography>need to sign in first</Typography>} */}
+      {(errorStatus === 'token expired' || errorStatus === 'Unauthorized') && <Typography>need to sign in first</Typography>}
       {
         drawer && belowBreakPointD &&
         <div style={{ width: '100vw', height: '100vh', position: 'fixed', top: '0px', left: '0px', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: '1' }} />
@@ -61,12 +59,22 @@ export async function getServerSideProps(context) {
   let errorStatus = null;
 
   try {
-    const videosResponse = await axios.get('http://localhost:3001/playlistvideos', {
-      params: {
-        id: list,
-        token: context.req.cookies.token
-      }
-    });
+    let videosResponse;
+    if (list === 'LL') {
+      videosResponse = await axios.get('http://localhost:3001/playlistvideos', {
+        params: {
+          id: list,
+          token: context.req.cookies.token
+        }
+      });
+    } else {
+      videosResponse = await axios.get('http://localhost:3001/publicplaylistvideo', {
+        params: {
+          id: list,
+        }
+      });
+    }
+
     loadedPlaylistVideos = videosResponse.data;
   } catch (error) {
     errorStatus = error.response.data.error;

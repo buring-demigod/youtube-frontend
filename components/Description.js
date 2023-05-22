@@ -1,5 +1,3 @@
-import getChannel from "@/utils/functions/getChannel";
-import getVideo from "@/utils/functions/getVideo";
 import { Box, IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Image from "next/image";
@@ -15,6 +13,8 @@ import ContentCutOutlinedIcon from '@mui/icons-material/ContentCutOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import { useRouter } from "next/router";
 import axios from "axios";
+import formatNumber from "@/utils/functions/formatNumber";
+import formatTime from "@/utils/functions/formatTime";
 
 const useStyles = makeStyles((theme) => (
   {
@@ -91,14 +91,16 @@ const Description = () => {
         params: {
           videoId: v
         }
-      })
+      });
+
       const channelResponse = await axios.get('http://localhost:3001/channel', {
         params: {
           channelId: videoResponse.data.items[0]?.snippet.channelId
         }
-      })
+      });
+
       setVideo(videoResponse.data.items[0]);
-      setChannel(channelResponse.data.items[0]);
+      setChannel(channelResponse.data);
       return;
     }
 
@@ -123,14 +125,14 @@ const Description = () => {
           />
           <Stack alignItems="start">
             <Typography className={classes.channelTitle}>{video.snippet.channelTitle}</Typography>
-            <Typography className={classes.subscriberCount}>{channel.statistics.subscriberCount} subscribers</Typography>
+            <Typography className={classes.subscriberCount}>{formatNumber(channel.statistics.subscriberCount)} subscribers</Typography>
           </Stack>
           <button className={classes.subscribe}>Subscribe</button>
         </Stack>
         <Stack direction="row" spacing={2}>
           <IconButton className={classes.like} >
             <ThumbUpOutlinedIcon sx={{ padding: '0px 8px', color: 'black', fontSize: '22px' }} />
-            <Typography sx={{ borderRight: '1px solid grey', paddingRight: '8px', color: 'black', fontSize: '14px' }}>{video.statistics.likeCount}</Typography>
+            <Typography sx={{ borderRight: '1px solid grey', paddingRight: '8px', color: 'black', fontSize: '14px' }}>{formatNumber(video.statistics.likeCount)}</Typography>
             <ThumbDownOutlinedIcon sx={{ padding: '0px 8px', color: 'black', fontSize: '22px' }} />
           </IconButton>
           <IconButton className={classes.like}>
@@ -148,7 +150,7 @@ const Description = () => {
       </Stack>
       <Box className={classes.infoBox}>
         <Stack alignItems="start">
-          <Typography sx={{ fontSize: '14px', fontWeight: 500 }}>{video.statistics.viewCount} views  6 days ago</Typography>
+          <Typography sx={{ fontSize: '14px', fontWeight: 500 }}>{video.statistics.viewCount} views {formatTime(video.snippet.publishedAt)}</Typography>
           <Typography sx={{ fontSize: '14px' }}>{(showMore && video.snippet.description) || video.snippet.description.slice(0, 200)}</Typography>
           {!showMore && video.snippet.description.length > 200 && <button onClick={() => setShowMore(true)} style={{ color: 'black', border: 'none', fontWeight: 'bold' }}>Show more</button>}
           {showMore && <button onClick={() => setShowMore(false)} style={{ color: 'black', border: 'none', fontWeight: 'bold', marginTop: '20px' }}>Show less</button>}

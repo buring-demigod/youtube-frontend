@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Box, Stack, Typography, useMediaQuery } from '@mui/material';
 import { makeStyles } from "@mui/styles";
-
-import Drawer from '@/components/Drawer';
-import getChannel from '@/utils/functions/getChannel';
 import { useMainContext } from '@/context/createMainContext';
 import Banner from '@/components/Banner';
-import ChannelDetails from '@/components/ChannelDetails';
 import ChannelContent from '@/components/ChannelContent';
-import getVideos from '@/utils/functions/getVideos';
-import getPlaylist from '@/utils/functions/getPlaylist';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import ChannelDetails from '@/components/ChannelDetails';
+import HandleTokenExpire from '@/utils/functions/handleTokenExpire';
 
 
 const useStyles = makeStyles((theme) => (
@@ -84,8 +80,6 @@ const Index = ({ loadedChannel, loadedChannelVideos, loadedPopularVideos, loaded
     setPopularVideos(loadedPopularVideos);
     setPlaylists(loadedPlaylists);
   }, [loadedChannel, loadedChannelVideos, loadedPopularVideos, loadedPlaylists]);
-
-
 
   const handleSectionChange = (item) => {
     setChannelSet(item);

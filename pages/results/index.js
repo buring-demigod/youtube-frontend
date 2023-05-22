@@ -1,15 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Box, IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
 import { makeStyles } from '@mui/styles';
 
 //Icons
 import TuneIcon from '@mui/icons-material/Tune';
-
-import getVideos from "@/utils/functions/getVideos";
 import VideoCard from '@/components/VideoCard';
-import Drawer from '@/components/Drawer';
 import { useMainContext } from '@/context/createMainContext';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import { debounce } from 'lodash';
 
 const useStyles = makeStyles((theme) => (
   {
@@ -46,7 +45,7 @@ const useStyles = makeStyles((theme) => (
       paddingLeft: '2px',
       overflowY: 'scroll',
       '&::-webkit-scrollbar': {
-        width: '5px',
+        width: '7px',
         height: '5px',
         top: '0px',
         right: '0px',
@@ -59,14 +58,48 @@ const useStyles = makeStyles((theme) => (
   }
 ));
 
-const Index = ({ loadedVideos }) => {
+const Index = ({ loadedVideos, nextPageToken }) => {
   const classes = useStyles();
-  const { videos, handleVideos, drawer } = useMainContext();
+  const router = useRouter();
+  const ref = useRef(null);
+
+  const { search_query } = router.query;
+  const { videos, handleVideos, setVideoToken, nextVideoPageToken, drawer } = useMainContext();
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
+  console.log(videos)
 
   useEffect(() => {
     handleVideos(loadedVideos);
-  }, [loadedVideos])
+    setVideoToken(nextPageToken);
+  }, [loadedVideos]);
+
+  const handleScroll = debounce(async () => {
+    const { scrollTop, clientHeight, scrollHeight } = ref.current;
+    console.log(scrollTop, clientHeight, scrollHeight)
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+      const nextPageVideoResponse = await axios.get('http://localhost:3001/videos', {
+        params: {
+          query: search_query,
+          pageToken: nextVideoPageToken,
+        }
+      });
+      handleVideos([...videos, ...nextPageVideoResponse.data.videos]);
+      setVideoToken(nextPageVideoResponse.data.nextPageToken);
+    }
+  }, 1000);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (ref.current) {
+        ref.current.removeEventListener('scroll', handleScroll);
+      }
+    }
+  });
+
+
 
   return (videos.length > 0 &&
     <Box className={classes.Box} sx={{ width: drawer ? 'calc(100vw - 270px)' : 'calc(100vw - 120px)', }}>
@@ -81,19 +114,21 @@ const Index = ({ loadedVideos }) => {
             </Typography>
           </Stack>
           <div className={classes.divider} />
-          <Box className={classes.videoContainer}>
+          <Box ref={ref} className={classes.videoContainer}>
             <Stack className={classes.container} spacing={3}>
               {videos.map((video, index) => (
                 <VideoCard
                   key={index}
                   type="searchCard"
-                  thumbnail={video.items[0].snippet.thumbnails.maxres?.url || video.items[0].snippet.thumbnails.standard.url}
+                  thumbnail={video.items[0].snippet.thumbnails.maxres?.url || video.items[0].snippet.thumbnails.standard.url || video.items[0].snippet.thumbnails.medium?.url}
                   channelDisplay={video.items[0].snippet.thumbnails.standard.url}
                   title={video.items[0].snippet.title}
+                  time={video.items[0].snippet.publishedAt}
                   channelTitle={video.items[0].snippet.channelTitle}
                   views={video.items[0].statistics.viewCount}
                   description={video.items[0].snippet.description}
                   videoId={video.items[0].id}
+                  channelId={video.items[0].snippet.channelId}
                 />
               ))}
             </Stack>
@@ -109,21 +144,25 @@ const Index = ({ loadedVideos }) => {
 }
 
 export async function getServerSideProps(context) {
-  const { query } = context;
-  const { search_query } = query;
+  const { search_query } = context.query;
+
   let loadedVideos = [];
+  let nextPageToken = null;
+
   try {
     const videosResponse = await axios.get('http://localhost:3001/videos', {
       params: {
         query: search_query
       }
     });
-    loadedVideos = videosResponse.data;
+    loadedVideos = videosResponse.data.videos;
+    nextPageToken = videosResponse.data.nextPageToken;
+
   } catch (error) {
     console.log(error.message);
   }
   return {
-    props: { loadedVideos },
+    props: { loadedVideos, nextPageToken },
   };
 }
 

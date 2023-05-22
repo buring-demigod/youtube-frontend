@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import { Stack } from '@mui/material';
 import '@/styles/globals.css';
 import Drawer from '@/components/Drawer';
+import { useRouter } from 'next/router';
 
 let theme = createTheme({
   breakpoints: {
@@ -27,7 +28,6 @@ theme = responsiveFontSizes(theme);
 
 export default function App(props) {
   const { Component, pageProps } = props;
-
   return (
     <ThemeProvider theme={theme}>
       <MainContextProvider>

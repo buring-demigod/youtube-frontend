@@ -92,6 +92,7 @@ const VideoSlider = ({ items, type, videoLeftId, videoRightId }) => {
               type={type || "sliderVideoCard"}
               thumbnail={video.items[0].snippet.thumbnails.high.url}
               title={video.items[0].snippet.title}
+              time={video.items[0].snippet.publishedAt}
               views={video.items[0].statistics.viewCount}
               videoId={video.items[0].id}
             />
@@ -168,6 +169,7 @@ const PlaylistSlider = ({ items, videoLeftId, videoRightId }) => {
 
 const ChannelContent = ({ recentVideos, popularVideos, playlists }) => {
   const classes = useStyles();
+  console.log(popularVideos);
 
   return (
     <Stack className={classes.stack}>

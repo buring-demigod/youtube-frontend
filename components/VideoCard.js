@@ -3,6 +3,9 @@ import { makeStyles } from '@mui/styles';
 import Image from "next/image";
 import { useRouter } from "next/router";
 import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
+import { useMainContext } from "@/context/createMainContext";
+import formatNumber from "@/utils/functions/formatNumber";
+import formatTime from "@/utils/functions/formatTime";
 
 const useStyles = makeStyles((theme) => (
   {
@@ -12,6 +15,7 @@ const useStyles = makeStyles((theme) => (
       border: 'none',
       boxShadow: 'none',
       margin: '4px 8px',
+      cursor: 'pointer',
       [theme.breakpoints.down('d')]: {
         width: 'calc((100% - 48px) / 3)',
         height: 300
@@ -48,6 +52,7 @@ const useStyles = makeStyles((theme) => (
       display: 'flex',
       border: 'none',
       boxShadow: 'none',
+      cursor: 'pointer',
       [theme.breakpoints.down('md')]: {
         height: '225px'
       },
@@ -102,6 +107,7 @@ const useStyles = makeStyles((theme) => (
       display: 'flex',
       border: 'none',
       boxShadow: 'none',
+      cursor: 'pointer'
     },
     relatedMedia: {
       borderRadius: 12,
@@ -191,7 +197,7 @@ const PlaylistCard = ({ thumbnail, title, videoId, itemCount, handleClick }) => 
   );
 }
 
-const SliderVideoCard = ({ thumbnail, title, views, videoId, handleClick }) => {
+const SliderVideoCard = ({ thumbnail, title, time, views, videoId, handleClick }) => {
   const classes = useStyles();
   return (
     <Card className={classes.sliderVideoCard} onClick={() => handleClick(videoId)} >
@@ -207,8 +213,8 @@ const SliderVideoCard = ({ thumbnail, title, views, videoId, handleClick }) => {
             <Typography fontSize={13} fontWeight={500} >{title.slice(0, 40)}</Typography>
           </Stack>
           <Stack sx={{ width: '100%' }} direction="row" spacing={1} alignItems="start">
-            <Typography fontSize={11} sx={{ color: 'gray' }} >{views} views</Typography>
-            <Typography fontSize={11} sx={{ color: 'gray' }} >6 days ago</Typography>
+            <Typography fontSize={11} sx={{ color: 'gray' }} >{formatNumber(views)} views</Typography>
+            <Typography fontSize={11} sx={{ color: 'gray' }} >{formatTime(time)}</Typography>
           </Stack>
         </Stack>
       </CardContent>
@@ -216,7 +222,7 @@ const SliderVideoCard = ({ thumbnail, title, views, videoId, handleClick }) => {
   );
 }
 
-const RelatedCard = ({ thumbnail, title, channelTitle, views, videoId, handleClick }) => {
+const RelatedCard = ({ thumbnail, title, time, channelTitle, views, videoId, handleClick }) => {
   const classes = useStyles();
   const belowBreakPointK = useMediaQuery((theme) => theme.breakpoints.down('k'));
 
@@ -235,7 +241,7 @@ const RelatedCard = ({ thumbnail, title, channelTitle, views, videoId, handleCli
           </Stack>
           <Stack sx={{ width: '100%' }} alignItems="start">
             <Typography fontSize={12} sx={{ color: 'gray' }} >{channelTitle}</Typography>
-            <Typography fontSize={12} sx={{ color: 'gray' }} >{views} .  6 days ago</Typography>
+            <Typography fontSize={12} sx={{ color: 'gray' }} >{formatNumber(views)} .  {formatTime(time)}</Typography>
           </Stack>
         </Stack>
       </CardContent>
@@ -244,15 +250,16 @@ const RelatedCard = ({ thumbnail, title, channelTitle, views, videoId, handleCli
 }
 
 
-const SearchCard = ({ thumbnail, channelDisplay, title, description, channelTitle, views, videoId, handleClick }) => {
+const SearchCard = ({ thumbnail, channelDisplay, title, time, description, channelTitle, views, videoId, channelId, handleClick, handleChannelClick }) => {
   const classes = useStyles();
   const belowBreakPointI = useMediaQuery((theme) => theme.breakpoints.down('i'));
 
   return (
-    <Card className={classes.searchcard} onClick={() => handleClick(videoId)} >
+    <Card className={classes.searchcard}  >
       <CardMedia
         component="img"
         className={classes.searchmedia}
+        onClick={() => handleClick(videoId)}
         image={thumbnail}
         title={title}
       />
@@ -260,12 +267,13 @@ const SearchCard = ({ thumbnail, channelDisplay, title, description, channelTitl
         <Stack spacing={2} alignItems='start'>
           <Stack sx={{ width: '100%' }}>
             <Typography fontSize={18} >{(belowBreakPointI && title.slice(0, 30)) || title.slice(0, 57)}{title.length >= 30 && '...'}</Typography>
-            <Typography fontSize={12} sx={{ color: 'gray' }} >{views} .  6 days ago</Typography>
+            <Typography fontSize={12} sx={{ color: 'gray' }} >{formatNumber(views)} .  {formatTime(time)}</Typography>
           </Stack>
           <Stack sx={{ width: '100%' }} direction="row" alignItems="center">
             <Image
               src={channelDisplay}
               className={classes.searchimage}
+              onClick={() => handleChannelClick(channelId)}
               alt='channel profile picture'
               width={30}
               height={30}
@@ -281,15 +289,16 @@ const SearchCard = ({ thumbnail, channelDisplay, title, description, channelTitl
   )
 }
 
-const GetHomeCard = ({ thumbnail, channelDisplay, title, channelTitle, views, videoId, handleClick }) => {
+const GetHomeCard = ({ thumbnail, channelDisplay, title, time, channelTitle, views, videoId, channelId, handleClick, handleChannelClick }) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.homecard} onClick={() => handleClick(videoId)}>
+    <Card className={classes.homecard} >
       <CardMedia
         className={classes.homemedia}
         image={thumbnail}
-        title="green iguana"
+        onClick={() => handleClick(videoId)}
+        title="video"
       />
       <CardContent className={classes.homecontent} >
         <Stack direction='row' spacing={2} alignItems='flex-start'>
@@ -297,13 +306,14 @@ const GetHomeCard = ({ thumbnail, channelDisplay, title, channelTitle, views, vi
             src={channelDisplay}
             className={classes.homeimage}
             alt='channel profile picture'
+            onClick={() => handleChannelClick(channelId)}
             width={45}
             height={45}
           />
-          <Stack alignItems='start'>
+          <Stack alignItems='start' onClick={() => handleClick(videoId)}>
             <Typography fontSize={15} fontWeight='500'>{title.slice(0, 44)}{title.length >= 47 && '...'}</Typography>
             <Typography fontSize={13} sx={{ color: 'gray' }} >{channelTitle}</Typography>
-            <Typography fontSize={13} sx={{ color: 'gray' }} >{views} .  6 days ago</Typography>
+            <Typography fontSize={13} sx={{ color: 'gray' }} >{formatNumber(views)} .  {formatTime(time)}</Typography>
           </Stack>
         </Stack>
       </CardContent>
@@ -312,11 +322,17 @@ const GetHomeCard = ({ thumbnail, channelDisplay, title, channelTitle, views, vi
 }
 
 
-const VideoCard = ({ type, thumbnail, channelDisplay, title, itemCount, channelTitle, views, videoId, description }) => {
+const VideoCard = ({ type, thumbnail, channelDisplay, title, time, itemCount, channelTitle, views, videoId, channelId, description }) => {
   const router = useRouter();
+  const { setDrawer } = useMainContext();
 
   const handleClick = (videoId) => {
-    router.push({ pathname: '/watch', query: { v: videoId } })
+    setDrawer(false);
+    router.push({ pathname: '/watch', query: { v: videoId } });
+  }
+
+  const handleChannelClick = (channelId) => {
+    router.push({ pathname: `/${channelId}` });
   }
 
   const handlePlaylistClick = (id) => {
@@ -330,11 +346,14 @@ const VideoCard = ({ type, thumbnail, channelDisplay, title, itemCount, channelT
           thumbnail={thumbnail}
           channelDisplay={channelDisplay}
           title={title}
+          time={time}
           channelTitle={channelTitle}
           views={views}
           description={description}
           videoId={videoId}
+          channelId={channelId}
           handleClick={handleClick}
+          handleChannelClick={handleChannelClick}
         />
       )
       break;
@@ -344,6 +363,7 @@ const VideoCard = ({ type, thumbnail, channelDisplay, title, itemCount, channelT
           thumbnail={thumbnail}
           channelDisplay={channelDisplay}
           title={title}
+          time={time}
           channelTitle={channelTitle}
           views={views}
           description={description}
@@ -357,6 +377,7 @@ const VideoCard = ({ type, thumbnail, channelDisplay, title, itemCount, channelT
         <SliderVideoCard
           thumbnail={thumbnail}
           title={title}
+          time={time}
           views={views}
           videoId={videoId}
           handleClick={handleClick}
@@ -384,6 +405,9 @@ const VideoCard = ({ type, thumbnail, channelDisplay, title, itemCount, channelT
           views={views}
           videoId={videoId}
           handleClick={handleClick}
+          handleChannelClick={handleChannelClick}
+          time={time}
+          channelId={channelId}
         />
       );
   }

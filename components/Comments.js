@@ -6,6 +6,9 @@ import SortIcon from '@mui/icons-material/Sort';
 import Image from 'next/image';
 import CommentCard from './CommentCard';
 import { useMainContext } from '@/context/createMainContext';
+import { useRouter } from 'next/router';
+import axios from 'axios';
+import formatNumber from '@/utils/functions/formatNumber';
 
 const useStyles = makeStyles((theme) => (
   {
@@ -30,15 +33,38 @@ const useStyles = makeStyles((theme) => (
 
 const Comments = () => {
   const classes = useStyles();
+  const router = useRouter();
+  const { v } = router.query;
+
+  const [video, setVideo] = useState(null);
   const { comments } = useMainContext();
+
+  useEffect(() => {
+    const getData = async () => {
+      const videoResponse = await axios.get('http://localhost:3001/video', {
+        params: {
+          videoId: v
+        }
+      });
+
+      setVideo(videoResponse.data.items[0]);
+      return;
+    }
+
+    if (v) {
+      getData();
+    }
+  }, [v])
+
+
 
   const belowBreakPointK = useMediaQuery((theme) => theme.breakpoints.down('k'));
 
   return (
-    comments.length > 0 &&
+    comments.length > 0 && video &&
     <Stack spacing={2} alignItems="start" sx={{ width: '93%', marginTop: belowBreakPointK && '22px' }}>
       <Stack direction="row" spacing={3} alignItems="center" >
-        <Typography sx={{ fontSize: 15, fontWeight: 400 }}>47293 Comments</Typography>
+        <Typography sx={{ fontSize: 15, fontWeight: 400 }}>{formatNumber(video.statistics.commentCount)} Comments</Typography>
         <Stack direction='row' spacing={1} alignItems="center">
           <IconButton>
             <SortIcon sx={{ color: 'black' }} />
@@ -64,7 +90,7 @@ const Comments = () => {
             userName={comment.snippet.topLevelComment.snippet.authorDisplayName}
             content={comment.snippet.topLevelComment.snippet.textDisplay}
             likeCount={comment.snippet.topLevelComment.snippet.likeCount}
-            time="6 days ago"
+            time={comment.snippet.topLevelComment.snippet.publishedAt}
           />
         )}
       </Stack>

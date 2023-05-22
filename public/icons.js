@@ -34,10 +34,13 @@ import NewspaperIcon from '@mui/icons-material/Newspaper';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
-import SettingsIcon from '@mui/icons-material/Settings';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import FlagIcon from '@mui/icons-material/Flag';
 import HelpIcon from '@mui/icons-material/Help';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
+import PersonIcon from '@mui/icons-material/Person';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 
 export {
   HomeIcon,
@@ -76,8 +79,11 @@ export {
   EmojiEventsIcon,
   LightbulbIcon,
   CheckroomIcon,
-  SettingsIcon,
+  PersonOutlinedIcon,
   FlagIcon,
   HelpIcon,
-  AnnouncementIcon
+  AnnouncementIcon,
+  PersonIcon,
+  FacebookIcon,
+  FacebookOutlinedIcon
 }

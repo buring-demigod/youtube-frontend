@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 
 //Icons
 import {
-  HomeIcon, SubscriptionsIcon, VideoLibraryIcon, HistoryOutlinedIcon, SlideshowOutlinedIcon, WatchLaterOutlinedIcon, ThumbUpOutlinedIcon, WhatshotOutlinedIcon, LocalMallOutlinedIcon, MusicNoteOutlinedIcon, MovieOutlinedIcon, SettingsInputAntennaOutlinedIcon, SportsEsportsOutlinedIcon, NewspaperOutlinedIcon, EmojiEventsOutlinedIcon, LightbulbOutlinedIcon, CheckroomOutlinedIcon, SettingsOutlinedIcon, OutlinedFlagRoundedIcon, HelpOutlineOutlinedIcon, AnnouncementOutlinedIcon, HomeOutlinedIcon, VideoLibraryOutlinedIcon, SubscriptionsOutlinedIcon, WatchLaterIcon, ThumbUpIcon, WhatshotIcon, LocalMallIcon, MusicNoteIcon, MovieIcon, SettingsInputAntennaIcon, SportsEsportsIcon, NewspaperIcon, EmojiEventsIcon, LightbulbIcon, CheckroomIcon, SettingsIcon, FlagIcon, HelpIcon, AnnouncementIcon
+  HomeIcon, SubscriptionsIcon, VideoLibraryIcon, HistoryOutlinedIcon, SlideshowOutlinedIcon, WatchLaterOutlinedIcon, ThumbUpOutlinedIcon, WhatshotOutlinedIcon, LocalMallOutlinedIcon, MusicNoteOutlinedIcon, MovieOutlinedIcon, SettingsInputAntennaOutlinedIcon, SportsEsportsOutlinedIcon, NewspaperOutlinedIcon, EmojiEventsOutlinedIcon, LightbulbOutlinedIcon, CheckroomOutlinedIcon, SettingsOutlinedIcon, OutlinedFlagRoundedIcon, HelpOutlineOutlinedIcon, AnnouncementOutlinedIcon, HomeOutlinedIcon, VideoLibraryOutlinedIcon, SubscriptionsOutlinedIcon, WatchLaterIcon, ThumbUpIcon, WhatshotIcon, LocalMallIcon, MusicNoteIcon, MovieIcon, SettingsInputAntennaIcon, SportsEsportsIcon, NewspaperIcon, EmojiEventsIcon, LightbulbIcon, CheckroomIcon, PersonOutlinedIcon, FlagIcon, HelpIcon, AnnouncementIcon, PersonIcon, FacebookIcon, FacebookOutlinedIcon
 } from '../public/icons';
 
 import { useMainContext } from '@/context/createMainContext';
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => (
       },
       maxHeight: 'calc(100vh - 64px)',
       '&::-webkit-scrollbar': {
-        width: '5px',
+        width: '7px',
         height: '5px',
         top: '0px',
         right: '0px',
@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => (
     },
     p: {
       padding: '0px 8px',
+      userSelect: 'none'
     },
     stack: {
       borderRadius: '14px',
@@ -93,7 +94,7 @@ const SidebarContent = ({ items, direction, spacing, typographyFont, contentSpac
           <Icon className={classes.icons}>
             {drawerActive === item.name ? item.activeIcon : item.icon}
           </Icon>
-          <Typography sx={{ fontSize: typographyFont || '13px', fontWeight: drawerActive === item.name ? '500' : '400' }}>
+          <Typography sx={{ fontSize: typographyFont || '15px', fontWeight: drawerActive === item.name ? '500' : '400' }}>
             {item.name}
           </Typography>
         </Stack>
@@ -119,7 +120,7 @@ const SubscriptionContent = () => {
           alignItems="center"
           sx={{ backgroundColor: drawerActive === item.snippet.title ? 'rgba(184, 179, 179, 0.295)' : 'white', width: '190px' }} onClick={() => {
             handleDrawerActive(item.snippet.title);
-            router.push(`${item.snippet.resourceId.channelId}`);
+            router.push({ pathname: `/${item.snippet.resourceId.channelId}` });
           }}
         >
           <Image
@@ -129,7 +130,7 @@ const SubscriptionContent = () => {
             style={{ borderRadius: '50%', padding: '8px 0px 8px 8px' }}
             alt="channel picture"
           />
-          <Typography sx={{ fontSize: '13px', fontWeight: drawerActive === item.snippet.title ? '500' : '400' }}>
+          <Typography sx={{ fontSize: '14px', fontWeight: drawerActive === item.snippet.title ? '500' : '400' }}>
             {item.snippet.title}
           </Typography>
         </Stack>
@@ -141,18 +142,21 @@ const SubscriptionContent = () => {
 
 const Drawer = () => {
   const classes = useStyles();
+  const router = useRouter();
   const { subscriptions } = useMainContext();
   const { drawer } = useMainContext();
   const aboveBreakPointD = useMediaQuery((theme) => theme.breakpoints.up('d'));
 
+  const path = router.pathname;
+
   return (
     <>
-      <Box className={classes.box} sx={{ display: drawer ? 'block !important' : 'none !important' }}>
+      <Box className={classes.box} sx={{ display: drawer ? 'block !important' : 'none !important', position: path === '/watch' && 'absolute !important', zIndex: path === '/watch' && '3 !important', backgroundColor: path === '/watch' && 'white' }}>
 
         <SidebarContent
           items={[
             { name: 'Home', icon: <HomeOutlinedIcon />, activeIcon: <HomeIcon />, targetPath: '/' },
-            { name: 'Shorts', icon: <VideoLibraryOutlinedIcon />, activeIcon: <VideoLibraryIcon /> },
+            { name: 'Shorts', icon: <VideoLibraryOutlinedIcon />, activeIcon: <VideoLibraryIcon />, targetPath: '/shorts' },
             { name: 'Subscription', icon: <SubscriptionsOutlinedIcon />, activeIcon: <SubscriptionsIcon />, targetPath: '/feed/subscriptions' }
           ]}
         />
@@ -161,7 +165,7 @@ const Drawer = () => {
 
         <SidebarContent
           items={[
-            { name: 'Library', icon: <VideoLibraryOutlinedIcon />, activeIcon: <VideoLibraryIcon />, targetPath: '/feed/library' },
+            { name: 'Library', icon: <VideoLibraryOutlinedIcon />, activeIcon: <VideoLibraryIcon />, targetPath: '/playlist?list=LL' },
             { name: 'History', icon: <HistoryOutlinedIcon />, activeIcon: <HistoryOutlinedIcon />, targetPath: '/feed/history' },
             { name: 'Your videos', icon: <SlideshowOutlinedIcon />, activeIcon: <SlideshowOutlinedIcon /> },
             { name: 'Watch later', icon: <WatchLaterOutlinedIcon />, activeIcon: <WatchLaterIcon /> },
@@ -189,9 +193,6 @@ const Drawer = () => {
               { name: 'Trending', icon: < WhatshotOutlinedIcon />, activeIcon: <WhatshotIcon />, targetPath: "/feed/trending" },
               { name: 'Shopping', icon: <LocalMallOutlinedIcon />, activeIcon: <LocalMallIcon />, targetPath: "/UCkYQyvc_i9hXEo4xic9Hh2g" },
               { name: 'Music', icon: <MusicNoteOutlinedIcon />, activeIcon: <MusicNoteIcon />, targetPath: "/UC-9-kyTW8ZkZNDHQJ6FgpwQ" },
-              { name: 'Movies & Shows', icon: <MovieOutlinedIcon />, activeIcon: <MovieIcon />, targetPath: '/feed/movies' },
-              { name: 'Live', icon: <SettingsInputAntennaOutlinedIcon />, activeIcon: <SettingsInputAntennaIcon />, targetPath: 'UC4R8DWoMoI7CAwX8_LjQHig' },
-              { name: 'Gaming', icon: <SportsEsportsOutlinedIcon />, activeIcon: <SportsEsportsIcon />, targetPath: '/feed/gamming' },
               { name: 'News', icon: <NewspaperOutlinedIcon />, activeIcon: <NewspaperIcon />, targetPath: 'UCYfdidRxbB8Qhf0Nx7ioOYw' },
               { name: 'Sports', icon: <EmojiEventsOutlinedIcon />, activeIcon: <EmojiEventsIcon />, targetPath: 'UCEgdi0XIXXZ-qJOFPf4JSKw' },
               { name: 'Learning', icon: <LightbulbOutlinedIcon />, activeIcon: <LightbulbIcon />, targetPath: 'UCtFRv9O2AHqOZjjynzrv-xg' },
@@ -204,10 +205,8 @@ const Drawer = () => {
 
         <SidebarContent
           items={[
-            { name: 'Setting', icon: < SettingsOutlinedIcon />, activeIcon: <SettingsIcon /> },
-            { name: 'Report history', icon: < OutlinedFlagRoundedIcon />, activeIcon: <FlagIcon /> },
-            { name: 'Help', icon: <HelpOutlineOutlinedIcon />, activeIcon: <HelpIcon /> },
-            { name: 'Send feedback', icon: <AnnouncementOutlinedIcon />, activeIcon: <AnnouncementIcon /> }]}
+            { name: 'About Developer', icon: <PersonOutlinedIcon />, activeIcon: <PersonIcon />, targetPath: '/dev/profile' },
+            { name: 'Send feedback', icon: <AnnouncementOutlinedIcon />, activeIcon: <AnnouncementIcon />, targetPath: '/dev/feedback' }]}
         />
 
         <p className={classes.divider} />
@@ -221,14 +220,14 @@ const Drawer = () => {
       </Box>
 
       {/* Drawer that will be visible in screensize <= lg  */}
-      {(!drawer || !aboveBreakPointD) &&
+      {(!drawer || !aboveBreakPointD) && !(path === '/watch') &&
         <Box className={classes.smallBox} >
           <SidebarContent
             items={[
-              { name: 'Home', icon: <HomeOutlinedIcon />, activeIcon: <HomeIcon /> },
-              { name: 'Shorts', icon: <VideoLibraryOutlinedIcon />, activeIcon: <VideoLibraryIcon /> },
-              { name: 'Subscription', icon: <SubscriptionsOutlinedIcon />, activeIcon: <SubscriptionsIcon /> },
-              { name: 'Library', icon: <VideoLibraryOutlinedIcon />, activeIcon: <VideoLibraryIcon /> }
+              { name: 'Home', icon: <HomeOutlinedIcon />, activeIcon: <HomeIcon />, targetPath: '/' },
+              { name: 'Shorts', icon: <VideoLibraryOutlinedIcon />, activeIcon: <VideoLibraryIcon />, targetPath: '/shorts' },
+              { name: 'Subscription', icon: <SubscriptionsOutlinedIcon />, activeIcon: <SubscriptionsIcon />, targetPath: '/feed/subscriptions' },
+              { name: 'Library', icon: <VideoLibraryOutlinedIcon />, activeIcon: <VideoLibraryIcon />, targetPath: '/playlist?list=LL' }
             ]}
             direction="column"
             spacing={2}

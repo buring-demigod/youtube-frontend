@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import Drawer from '@/components/Drawer';
 import { useMainContext } from '@/context/createMainContext';
 
 const useStyles = makeStyles((theme) => (
@@ -103,15 +102,11 @@ const Trending = ({ loadedVideos, loadedSubscriptions, loadedUser, errorStatus }
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
 
   useEffect(() => {
-    if (errorStatus === 'token expired') {
-      HandleTokenExpire();
-    }
     handleUser(loadedUser);
     handleSubscriptions(loadedSubscriptions);
-    setVideos(loadedVideos);
     setSelected('MUSIC');
 
-  }, [loadedVideos, loadedSubscriptions, loadedUser]);
+  }, [loadedUser, loadedSubscriptions]);
 
   const handleChange = async (item) => {
     const id = item === 'MUSIC' ? 10 : item === 'GAMING' ? 20 : 1;
@@ -195,7 +190,7 @@ export async function getServerSideProps(context) {
       });
       loadedUser = userResponse.data;
     } catch (error) {
-      errorStatus = error.response.data.error;
+      errorStatus = error.response.data.message;
     }
   }
 
