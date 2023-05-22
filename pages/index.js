@@ -37,7 +37,7 @@ const Home = ({ loadedVideos, loadedSubscriptions, loadedUser, nextPageToken, er
 
   const handleClick = async (item) => {
     if (item === activeButton) return;
-    const videosResponse = await axios.get('http://localhost:3001/videos', {
+    const videosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
       params: {
         query: item === 'All' ? null : item,
       }
@@ -74,7 +74,7 @@ export async function getServerSideProps(context) {
   let errorStatus = null;
 
   try {
-    const videosResponse = await axios.get('http://localhost:3001/videos');
+    const videosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos');
     loadedVideos = videosResponse.data.videos;
     nextPageToken = videosResponse.data.nextPageToken;
   } catch (error) {
@@ -83,14 +83,14 @@ export async function getServerSideProps(context) {
 
   if (context.req.cookies.token) {
     try {
-      const response = await axios.get('http://localhost:3001/subcriptions', {
+      const response = await axios.get('https://youtubebackend.azurewebsites.net/subcriptions', {
         params: {
           token: context.req.cookies.token
         }
       });
       loadedSubscriptions = response.data.data;
 
-      const userResponse = await axios.get('http://localhost:3001/getUser', {
+      const userResponse = await axios.get('https://youtubebackend.azurewebsites.net/getUser', {
         params: {
           token: context.req.cookies.token
         }

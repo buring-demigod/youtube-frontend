@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => (
   }
 ));
 
-const profile = () => {
+const Profile = () => {
   const classes = useStyles();
   const { drawer } = useMainContext();
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
@@ -72,4 +72,4 @@ const profile = () => {
     </Box>
   );
 }
-export default profile
+export default Profile

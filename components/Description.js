@@ -87,13 +87,13 @@ const Description = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const videoResponse = await axios.get('http://localhost:3001/video', {
+      const videoResponse = await axios.get('https://youtubebackend.azurewebsites.net/video', {
         params: {
           videoId: v
         }
       });
 
-      const channelResponse = await axios.get('http://localhost:3001/channel', {
+      const channelResponse = await axios.get('https://youtubebackend.azurewebsites.net/channel', {
         params: {
           channelId: videoResponse.data.items[0]?.snippet.channelId
         }

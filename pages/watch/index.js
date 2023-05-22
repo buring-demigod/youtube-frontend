@@ -50,14 +50,14 @@ const Index = ({ loadedVideos, nextPageToken, loadedComments, nextCPageToken }) 
   const handleScroll = debounce(async () => {
     const { scrollTop, clientHeight, scrollHeight } = ref.current;
     if (scrollTop + clientHeight >= scrollHeight * 0.5) {
-      const nextPageVideoResponse = await axios.get('http://localhost:3001/videos', {
+      const nextPageVideoResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
         params: {
           videoId: v,
           pageToken: nextVideoPageToken,
         }
       });
 
-      const nextPageCommentsResponse = await axios.get('http://localhost:3001/comments', {
+      const nextPageCommentsResponse = await axios.get('https://youtubebackend.azurewebsites.net/comments', {
         params: {
           videoId: v,
           pageToken: nextCommentPageToken,
@@ -104,7 +104,7 @@ export async function getServerSideProps(context) {
   let nextCPageToken = null;
 
   try {
-    const videosResponse = await axios.get('http://localhost:3001/videos', {
+    const videosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
       params: {
         videoId: v
       }
@@ -116,7 +116,7 @@ export async function getServerSideProps(context) {
   }
 
   try {
-    const response = await axios.get('http://localhost:3001/comments', {
+    const response = await axios.get('https://youtubebackend.azurewebsites.net/comments', {
       params: {
         videoId: v
       }
