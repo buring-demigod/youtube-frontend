@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => (
       '&::-webkit-scrollbar-thumb': {
         background: 'gray',
         borderRadius: '5px',
+      },
+      [theme.breakpoints.down('i')]: {
+        padding: '0px'
       }
     },
   }

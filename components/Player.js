@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => (
       alignItems: 'center',
       [theme.breakpoints.down('k')]: {
         width: '97vw'
+      },
+      [theme.breakpoints.down('i')]: {
+        width: '100%'
       }
     },
     controlContainer: {

@@ -104,6 +104,9 @@ const useStyles = makeStyles((theme) => (
       [theme.breakpoints.down('k')]: {
         margin: '24px 0px 0px 0px !important'
       },
+      [theme.breakpoints.down('i')]: {
+        height: '105px'
+      },
       display: 'flex',
       border: 'none',
       boxShadow: 'none',
