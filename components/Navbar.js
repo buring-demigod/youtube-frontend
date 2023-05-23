@@ -122,10 +122,10 @@ const NavMain = () => {
   const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
   return (
     <Stack direction="row" spacing={0.8} alignItems="center">
-      <IconButton onClick={handleDrawer} sx={{ padding: belowBreakPointL && '8px 4px' }}>
+      <IconButton onClick={handleDrawer} sx={{ padding: belowBreakPointL && '8px 4px' || '8px' }}>
         <MenuIcon sx={{ fontSize: '28px', color: 'black' }} />
       </IconButton>
-      <IconButton onClick={() => router.push('/')} sx={{ padding: belowBreakPointL && '8px 4px' }}>
+      <IconButton onClick={() => router.push('/')} sx={{ padding: belowBreakPointL && '8px 4px' || '8px' }}>
         <YouTubeIcon sx={{ fontSize: '40px', color: 'red' }} />
         <Typography variant="h6">Youtube</Typography>
       </IconButton>
@@ -178,12 +178,12 @@ const NavSearch = ({ inputStyles, IconStyles, handleOpen }) => {
         <IconButton
           className={IconStyles || classes.searchbutton}
           onClick={(belowBreakPointI && handleOpen) || handleSubmit}
-          sx={{ padding: belowBreakPointL && '8px 4px 8px 12px   !important' }}
+          sx={{ padding: belowBreakPointL && '8px 4px 8px 12px   !important' || '8px' }}
         >
           <SearchIcon />
         </IconButton>
       </div>
-      <IconButton onClick={handleVoiceInput} sx={{ padding: belowBreakPointL && '8px 12px 8px 4px ' }}>
+      <IconButton onClick={handleVoiceInput} sx={{ padding: belowBreakPointL && '8px 12px 8px 4px ' || '8px' }}>
         <MicIcon sx={{ color: 'black' }} />
       </IconButton>
     </Stack>
@@ -196,10 +196,10 @@ const NavEnd = () => {
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      <IconButton sx={{ padding: belowBreakPointL && '8px 4px' }}>
+      <IconButton sx={{ padding: belowBreakPointL && '8px 4px' || '8px' }}>
         <VideoCallIcon sx={{ color: 'black' }} />
       </IconButton>
-      <IconButton sx={{ padding: belowBreakPointL && '8px 4px' }}>
+      <IconButton sx={{ padding: belowBreakPointL && '8px 4px' || '8px' }}>
         <NotificationsNoneIcon sx={{ color: 'black' }} />
       </IconButton>
       {(user.name !== '' && <Image src={user.picture} width={30} height={30} alt="user profile" style={{ borderRadius: '50%' }} />) || <button onClick={handleSignUp} >sign up</button>}
