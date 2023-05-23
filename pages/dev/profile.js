@@ -26,6 +26,8 @@ const Profile = () => {
   const classes = useStyles();
   const { drawer } = useMainContext();
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
+  const belowBreakPointG = useMediaQuery((theme) => theme.breakpoints.down('g'));
+  const belowBreakPointM = useMediaQuery((theme) => theme.breakpoints.down('m'));
 
   const handleGithubClick = () => {
     window.open('https://github.com/buring-demigod', '_blank')
@@ -39,8 +41,27 @@ const Profile = () => {
     <Box className={classes.box} sx={{ width: drawer ? 'calc(100vw - 270px)' : 'calc(100vw - 120px)' }}>
       <Stack className={classes.stack} spacing={4} alignItems="center">
         <Typography className={classes.main}>Software Engineer</Typography>
-        <Stack direction="row" alignItems="start" spacing={6} sx={{ width: '100%' }}>
-          <Stack spacing={1} sx={{ width: 'calc((100% / 3))' }}>
+        <Stack direction={(belowBreakPointG && 'column') || 'row'} alignItems={(belowBreakPointG && 'center') || 'start'} spacing={6} sx={{ width: '100%' }}>
+          {
+            belowBreakPointG &&
+            <Stack direction="row" justifyContent="space-between" sx={{ width: '100%' }}>
+              <Image
+                src='/profile.jpg'
+                width={belowBreakPointM && 150 || 200}
+                height={belowBreakPointM && 150 || 200}
+                alt='picture'
+                style={{ borderRadius: '50%' }}
+              />
+              <Stack spacing={1} alignItems="start">
+                <Typography fontSize={15} fontWeight={500}>Check out</Typography>
+                <IconButton onClick={handleGithubClick}><GitHubIcon /></IconButton>
+                <IconButton onClick={handleLinkedinClick}><LinkedInIcon /></IconButton>
+                <a href='/Online.pdf' download style={{ textDecoration: 'none' }}>Download resume</a>
+              </Stack>
+            </Stack>
+
+          }
+          <Stack spacing={1} sx={{ width: belowBreakPointG && '100%' || 'calc((100% / 3))' }}>
             <Typography fontSize={15} fontWeight={500}>About me</Typography>
             <Typography fontSize={13} component="ul" sx={{ listStyleType: 'disc', pl: 2 }}>
               <li>My name is Mohammed Faiz Khan.</li>
@@ -49,19 +70,20 @@ const Profile = () => {
               <li>I am constantly seeking opportunities to expand my knowledge and stay up-to-date with the latest trends and best practices in backend development.</li>
             </Typography>
           </Stack>
-          <Image
+          {!belowBreakPointG && <Image
             src='/profile.jpg'
             width={200}
             height={200}
             alt='picture'
             style={{ borderRadius: '50%' }}
-          />
-          <Stack spacing={1} alignItems="start">
-            <Typography fontSize={15} fontWeight={500}>Check out</Typography>
-            <IconButton onClick={handleGithubClick}><GitHubIcon /></IconButton>
-            <IconButton onClick={handleLinkedinClick}><LinkedInIcon /></IconButton>
-            <a href='/Online.pdf' download style={{ textDecoration: 'none' }}>Download resume</a>
-          </Stack>
+          />}
+          {!belowBreakPointG &&
+            <Stack spacing={1} alignItems="start">
+              <Typography fontSize={15} fontWeight={500}>Check out</Typography>
+              <IconButton onClick={handleGithubClick}><GitHubIcon /></IconButton>
+              <IconButton onClick={handleLinkedinClick}><LinkedInIcon /></IconButton>
+              <a href='/Online.pdf' download style={{ textDecoration: 'none' }}>Download resume</a>
+            </Stack>}
         </Stack>
 
       </Stack>
