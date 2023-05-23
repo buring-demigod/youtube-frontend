@@ -3,6 +3,7 @@ import mainContext from "./createMainContext";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Cookies from 'js-cookie';
+import { useMediaQuery } from '@mui/material';
 
 const MainContextProvider = ({ children }) => {
   const router = useRouter();
@@ -13,7 +14,7 @@ const MainContextProvider = ({ children }) => {
   const [comments, setComments] = useState([]);
   const [nextCommentPageToken, setnextCommentPageToken] = useState(null);
   const [drawerActive, setDrawerActive] = useState('Home');
-  const [drawer, setDrawer] = useState(false);
+  const [drawer, setDrawer] = useState(true);
 
   const handleUser = (item) => {
     setUser(item);

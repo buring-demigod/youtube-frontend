@@ -32,6 +32,9 @@ const useStyles =
       padding: '0px 14px',
       display: 'flex',
       justifyContent: 'space-between',
+      [theme.breakpoints.down('l')]: {
+        justifyContent: 'flex-start',
+      }
     },
     searchbar: {
       height: '38px',
@@ -95,6 +98,9 @@ const useStyles =
       '&::placeholder': {
         color: 'rgba(48, 46, 46, 0.295)',
         fontSize: '14px',
+      },
+      [theme.breakpoints.down('m')]: {
+        width: 250,
       }
     },
     smIcon: {
@@ -113,12 +119,13 @@ const useStyles =
 const NavMain = () => {
   const router = useRouter();
   const { handleDrawer } = useMainContext();
+  const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
   return (
     <Stack direction="row" spacing={0.8} alignItems="center">
-      <IconButton onClick={handleDrawer}>
+      <IconButton onClick={handleDrawer} sx={{ padding: belowBreakPointL && '8px 4px' }}>
         <MenuIcon sx={{ fontSize: '28px', color: 'black' }} />
       </IconButton>
-      <IconButton onClick={() => router.push('/')}>
+      <IconButton onClick={() => router.push('/')} sx={{ padding: belowBreakPointL && '8px 4px' }}>
         <YouTubeIcon sx={{ fontSize: '40px', color: 'red' }} />
         <Typography variant="h6">Youtube</Typography>
       </IconButton>
@@ -131,6 +138,7 @@ const NavSearch = ({ inputStyles, IconStyles, handleOpen }) => {
   const [searchValue, setSearchValue] = useState('');
   const [transcript, setTranscript] = useState('');
   const belowBreakPointI = useMediaQuery((theme) => theme.breakpoints.down('i'));
+  const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
   const router = useRouter();
   const { handleVideos } = useMainContext();
 
@@ -170,11 +178,12 @@ const NavSearch = ({ inputStyles, IconStyles, handleOpen }) => {
         <IconButton
           className={IconStyles || classes.searchbutton}
           onClick={(belowBreakPointI && handleOpen) || handleSubmit}
+          sx={{ padding: belowBreakPointL && '8px 4px 8px 12px   !important' }}
         >
           <SearchIcon />
         </IconButton>
       </div>
-      <IconButton onClick={handleVoiceInput}>
+      <IconButton onClick={handleVoiceInput} sx={{ padding: belowBreakPointL && '8px 12px 8px 4px ' }}>
         <MicIcon sx={{ color: 'black' }} />
       </IconButton>
     </Stack>
@@ -182,15 +191,15 @@ const NavSearch = ({ inputStyles, IconStyles, handleOpen }) => {
 }
 
 const NavEnd = () => {
-  const classes = useStyles();
+  const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
   const { user, handleSignUp } = useMainContext();
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      <IconButton>
+      <IconButton sx={{ padding: belowBreakPointL && '8px 4px' }}>
         <VideoCallIcon sx={{ color: 'black' }} />
       </IconButton>
-      <IconButton>
+      <IconButton sx={{ padding: belowBreakPointL && '8px 4px' }}>
         <NotificationsNoneIcon sx={{ color: 'black' }} />
       </IconButton>
       {(user.name !== '' && <Image src={user.picture} width={30} height={30} alt="user profile" style={{ borderRadius: '50%' }} />) || <button onClick={handleSignUp} >sign up</button>}
@@ -200,11 +209,12 @@ const NavEnd = () => {
 
 const SmNavSearch = ({ handleClose }) => {
   const classes = useStyles();
+  const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
 
   return (
     <Box className={classes.smBox}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <IconButton onClick={handleClose}>
+        <IconButton onClick={handleClose} >
           <ArrowBackIcon />
         </IconButton>
         <NavSearch inputStyles={classes.smInput} IconStyles={classes.smIcon} />

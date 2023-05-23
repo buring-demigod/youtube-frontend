@@ -67,6 +67,7 @@ const Index = ({ loadedChannel, loadedChannelVideos, loadedPopularVideos, loaded
   const [channelSet, setChannelSet] = useState('HOME');
   const { handleSubscriptions, handleUser, drawer } = useMainContext();
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
+  const belowBreakPointG = useMediaQuery((theme) => theme.breakpoints.down('g'));
 
   useEffect(() => {
     if (errorStatus === 'token expired') {
@@ -88,7 +89,7 @@ const Index = ({ loadedChannel, loadedChannelVideos, loadedPopularVideos, loaded
   return (
     channelInfo &&
     <Box className={classes.entireBox}>
-      <Stack spacing={2} alignItems="center" sx={{ width: drawer ? 'calc(100vw - 270px)' : 'calc(100vw - 120px)', }}>
+      <Stack spacing={2} alignItems="center" sx={{ width: belowBreakPointG ? '100vw' : drawer ? 'calc(100vw - 270px)' : 'calc(100vw - 120px)' }}>
         {channelInfo.brandingSettings.image &&
           <Box
             className={classes.box}
@@ -135,14 +136,14 @@ export async function getServerSideProps(context) {
   let errorStatus = null;
 
   try {
-    const channelResponse = await axios.get('https://youtubebackend.azurewebsites.net/channel', {
+    const channelResponse = await axios.get('http://localhost:3001/channel', {
       params: {
         channelId: channel
       }
     });
     loadedChannel = channelResponse.data;
 
-    const channelVideosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
+    const channelVideosResponse = await axios.get('http://localhost:3001/videos', {
       params: {
         channelId: channel,
         order: "date"
@@ -151,7 +152,7 @@ export async function getServerSideProps(context) {
 
     loadedChannelVideos = channelVideosResponse.data;
 
-    const popularVideosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
+    const popularVideosResponse = await axios.get('http://localhost:3001/videos', {
       params: {
         channelId: channel,
         order: "viewCount"
@@ -160,7 +161,7 @@ export async function getServerSideProps(context) {
 
     loadedPopularVideos = popularVideosResponse.data;
 
-    const playlistsResponse = await axios.get('https://youtubebackend.azurewebsites.net/playlist', {
+    const playlistsResponse = await axios.get('http://localhost:3001/playlist', {
       params: {
         channelId: channel
       }
@@ -174,14 +175,14 @@ export async function getServerSideProps(context) {
 
   if (context.req.cookies.token) {
     try {
-      const response = await axios.get('https://youtubebackend.azurewebsites.net/subcriptions', {
+      const response = await axios.get('http://localhost:3001/subcriptions', {
         params: {
           token: context.req.cookies.token
         }
       });
       loadedSubscriptions = response.data.data;
 
-      const userResponse = await axios.get('https://youtubebackend.azurewebsites.net/getUser', {
+      const userResponse = await axios.get('http://localhost:3001/getUser', {
         params: {
           token: context.req.cookies.token
         }

@@ -16,7 +16,10 @@ const useStyles = makeStyles((theme) => (
       font: '14px',
       cursor: 'pointer',
       border: 'none',
-      borderRadius: '14px'
+      borderRadius: '14px',
+      [theme.breakpoints.down('m')]: {
+        width: '45px'
+      }
     },
     subscribe: {
       color: 'white',
@@ -26,7 +29,10 @@ const useStyles = makeStyles((theme) => (
       width: '60px',
       color: 'black',
       backgroundColor: 'white',
-      border: '1px solid black'
+      border: '1px solid black',
+      [theme.breakpoints.down('m')]: {
+        width: '30px'
+      }
     },
     sections: {
       padding: '12px 8px',

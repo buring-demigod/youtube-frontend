@@ -151,7 +151,10 @@ const Drawer = () => {
 
   return (
     <>
-      <Box className={classes.box} sx={{ display: drawer ? 'block !important' : 'none !important', position: path === '/watch' && 'absolute !important', zIndex: path === '/watch' && '3 !important', backgroundColor: path === '/watch' && 'white' }}>
+      <Box
+        className={classes.box}
+        id="drawer"
+        sx={{ display: drawer ? 'block !important' : 'none !important', position: path === '/watch' && 'absolute !important', zIndex: path === '/watch' && '3 !important', backgroundColor: path === '/watch' && 'white', }}>
 
         <SidebarContent
           items={[

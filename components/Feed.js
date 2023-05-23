@@ -42,7 +42,7 @@ const Feed = ({ activeButton }) => {
   const handleScroll = debounce(async () => {
     const { scrollTop, clientHeight, scrollHeight } = ref.current;
     if (scrollTop + clientHeight >= scrollHeight - 100) {
-      const nextPageVideoResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
+      const nextPageVideoResponse = await axios.get('http://localhost:3001/videos', {
         params: {
           pageToken: nextVideoPageToken,
           query: activeButton === 'All' ? null : activeButton,

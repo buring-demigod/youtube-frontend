@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => (
       height: 'calc(100vh - 92px)',
       width: '99%',
       overflowY: 'scroll',
+      overflowX: 'hidden',
       '&::-webkit-scrollbar': {
         width: 10,
         height: 3,
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => (
       }
     },
   }
-))
+));
 
 const Index = ({ loadedVideos, nextPageToken, loadedComments, nextCPageToken }) => {
   const classes = useStyles();
@@ -50,14 +51,14 @@ const Index = ({ loadedVideos, nextPageToken, loadedComments, nextCPageToken }) 
   const handleScroll = debounce(async () => {
     const { scrollTop, clientHeight, scrollHeight } = ref.current;
     if (scrollTop + clientHeight >= scrollHeight * 0.5) {
-      const nextPageVideoResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
+      const nextPageVideoResponse = await axios.get('http://localhost:3001/videos', {
         params: {
           videoId: v,
           pageToken: nextVideoPageToken,
         }
       });
 
-      const nextPageCommentsResponse = await axios.get('https://youtubebackend.azurewebsites.net/comments', {
+      const nextPageCommentsResponse = await axios.get('http://localhost:3001/comments', {
         params: {
           videoId: v,
           pageToken: nextCommentPageToken,
@@ -104,7 +105,7 @@ export async function getServerSideProps(context) {
   let nextCPageToken = null;
 
   try {
-    const videosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
+    const videosResponse = await axios.get('http://localhost:3001/videos', {
       params: {
         videoId: v
       }
@@ -116,7 +117,7 @@ export async function getServerSideProps(context) {
   }
 
   try {
-    const response = await axios.get('https://youtubebackend.azurewebsites.net/comments', {
+    const response = await axios.get('http://localhost:3001/comments', {
       params: {
         videoId: v
       }

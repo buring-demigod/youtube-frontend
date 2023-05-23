@@ -61,14 +61,14 @@ export async function getServerSideProps(context) {
   try {
     let videosResponse;
     if (list === 'LL') {
-      videosResponse = await axios.get('https://youtubebackend.azurewebsites.net/playlistvideos', {
+      videosResponse = await axios.get('http://localhost:3001/playlistvideos', {
         params: {
           id: list,
           token: context.req.cookies.token
         }
       });
     } else {
-      videosResponse = await axios.get('https://youtubebackend.azurewebsites.net/publicplaylistvideo', {
+      videosResponse = await axios.get('http://localhost:3001/publicplaylistvideo', {
         params: {
           id: list,
         }
@@ -82,14 +82,14 @@ export async function getServerSideProps(context) {
 
   if (context.req.cookies.token) {
     try {
-      const response = await axios.get('https://youtubebackend.azurewebsites.net/subcriptions', {
+      const response = await axios.get('http://localhost:3001/subcriptions', {
         params: {
           token: context.req.cookies.token
         }
       });
       loadedSubscriptions = response.data.data;
 
-      const userResponse = await axios.get('https://youtubebackend.azurewebsites.net/getUser', {
+      const userResponse = await axios.get('http://localhost:3001/getUser', {
         params: {
           token: context.req.cookies.token
         }

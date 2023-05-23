@@ -40,7 +40,11 @@ const useStyles = makeStyles((theme) => (
     cardMedia: {
       height: '138px',
       width: '246px',
-      borderRadius: '14px'
+      borderRadius: '14px',
+      [theme.breakpoints.down('m')]: {
+        height: '120px',
+        width: '170px',
+      }
     },
     content: {
       width: 'calc(100% - 500px)',
@@ -71,6 +75,7 @@ const Videos = ({ video }) => {
   const classes = useStyles();
   const router = useRouter();
   const belowBreakPointSm = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const belowBreakPointm = useMediaQuery((theme) => theme.breakpoints.down('m'));
 
   const handleClick = (id) => {
     router.push({ pathname: '/watch', query: { v: id } });
@@ -85,9 +90,9 @@ const Videos = ({ video }) => {
       />
       <CardContent className={classes.content}>
         <Stack spacing={1} alignItems="start">
-          <Typography fontSize={18}>{video.snippet.title.slice(0, 60)}</Typography>
+          <Typography fontSize={(belowBreakPointm && 15) || 18}>{video.snippet.title.slice(0, 60)}</Typography>
           <Typography fontSize={12} color="gray">{video.snippet.channelTitle}  {video.statistics.viewCount}  6days ago</Typography>
-          <Typography fontSize={12} color="gray">{(belowBreakPointSm && video.snippet.description.slice(0, 80)) || video.snippet.description.slice(0, 150)}</Typography>
+          <Typography fontSize={12} color="gray">{(belowBreakPointm && video.snippet.description.slice(0, 50)) || (belowBreakPointSm && video.snippet.description.slice(0, 80)) || video.snippet.description.slice(0, 150)}</Typography>
         </Stack>
       </CardContent>
     </Card>
@@ -176,14 +181,14 @@ export async function getServerSideProps(context) {
 
   if (context.req.cookies.token) {
     try {
-      const response = await axios.get('https://youtubebackend.azurewebsites.net/subcriptions', {
+      const response = await axios.get('http://localhost:3001/subcriptions', {
         params: {
           token: context.req.cookies.token
         }
       });
       loadedSubscriptions = response.data.data;
 
-      const userResponse = await axios.get('https://youtubebackend.azurewebsites.net/getUser', {
+      const userResponse = await axios.get('http://localhost:3001/getUser', {
         params: {
           token: context.req.cookies.token
         }

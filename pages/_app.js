@@ -21,6 +21,8 @@ let theme = createTheme({
       h: 1215,
       k: 1020,
       j: 810,
+      l: 455,
+      m: 485
     },
   },
 });

@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => (
   }
 ));
 
-const Player = ({ comments }) => {
+const Player = () => {
   const classes = useStyles();
   const router = useRouter();
 

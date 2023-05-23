@@ -77,7 +77,7 @@ const Index = ({ loadedVideos, nextPageToken }) => {
     const { scrollTop, clientHeight, scrollHeight } = ref.current;
     console.log(scrollTop, clientHeight, scrollHeight)
     if (scrollTop + clientHeight >= scrollHeight - 100) {
-      const nextPageVideoResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
+      const nextPageVideoResponse = await axios.get('http://localhost:3001/videos', {
         params: {
           query: search_query,
           pageToken: nextVideoPageToken,
@@ -150,7 +150,7 @@ export async function getServerSideProps(context) {
   let nextPageToken = null;
 
   try {
-    const videosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
+    const videosResponse = await axios.get('http://localhost:3001/videos', {
       params: {
         query: search_query
       }
