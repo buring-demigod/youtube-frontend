@@ -14,7 +14,7 @@ const MainContextProvider = ({ children }) => {
   const [comments, setComments] = useState([]);
   const [nextCommentPageToken, setnextCommentPageToken] = useState(null);
   const [drawerActive, setDrawerActive] = useState('Home');
-  const [drawer, setDrawer] = useState(true);
+  const [drawer, setDrawer] = useState(false);
 
   const handleUser = (item) => {
     setUser(item);
