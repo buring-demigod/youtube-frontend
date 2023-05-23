@@ -71,7 +71,7 @@ const MainContextProvider = ({ children }) => {
 
     /* global google*/
     const client = google.accounts.oauth2.initTokenClient({
-      client_id: '842216765313-3j5dhjfuu8cjnfbfld6grgu73h778oq5.apps.googleusercontent.com',
+      client_id: '582680695815-9hsi3h7ff9qla29fg59dnv9g9kscfg02.apps.googleusercontent.com',
       scope: 'https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
       ux_mode: 'popup',
       callback: GetData
