@@ -41,7 +41,7 @@ const Comments = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const videoResponse = await axios.get('http://localhost:3001/video', {
+      const videoResponse = await axios.get('https://youtubebackend.azurewebsites.net/video', {
         params: {
           videoId: v
         }

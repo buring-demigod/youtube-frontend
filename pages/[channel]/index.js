@@ -136,14 +136,14 @@ export async function getServerSideProps(context) {
   let errorStatus = null;
 
   try {
-    const channelResponse = await axios.get('http://localhost:3001/channel', {
+    const channelResponse = await axios.get('https://youtubebackend.azurewebsites.net/channel', {
       params: {
         channelId: channel
       }
     });
     loadedChannel = channelResponse.data;
 
-    const channelVideosResponse = await axios.get('http://localhost:3001/videos', {
+    const channelVideosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
       params: {
         channelId: channel,
         order: "date"
@@ -152,7 +152,7 @@ export async function getServerSideProps(context) {
 
     loadedChannelVideos = channelVideosResponse.data;
 
-    const popularVideosResponse = await axios.get('http://localhost:3001/videos', {
+    const popularVideosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
       params: {
         channelId: channel,
         order: "viewCount"
@@ -161,7 +161,7 @@ export async function getServerSideProps(context) {
 
     loadedPopularVideos = popularVideosResponse.data;
 
-    const playlistsResponse = await axios.get('http://localhost:3001/playlist', {
+    const playlistsResponse = await axios.get('https://youtubebackend.azurewebsites.net/playlist', {
       params: {
         channelId: channel
       }
@@ -175,14 +175,14 @@ export async function getServerSideProps(context) {
 
   if (context.req.cookies.token) {
     try {
-      const response = await axios.get('http://localhost:3001/subcriptions', {
+      const response = await axios.get('https://youtubebackend.azurewebsites.net/subcriptions', {
         params: {
           token: context.req.cookies.token
         }
       });
       loadedSubscriptions = response.data.data;
 
-      const userResponse = await axios.get('http://localhost:3001/getUser', {
+      const userResponse = await axios.get('https://youtubebackend.azurewebsites.net/getUser', {
         params: {
           token: context.req.cookies.token
         }

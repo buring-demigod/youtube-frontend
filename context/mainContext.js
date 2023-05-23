@@ -56,7 +56,7 @@ const MainContextProvider = ({ children }) => {
       const { name, email, picture } = userInfo.data;
       setUser({ name, email, picture });
 
-      const tokenInfo = await axios.post('http://localhost:3001/createuser', {
+      const tokenInfo = await axios.post('youtubebackend.azurewebsites.net/createuser', {
         name,
         email,
         picture,

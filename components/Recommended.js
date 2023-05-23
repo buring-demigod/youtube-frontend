@@ -28,7 +28,7 @@ const Recommended = () => {
 
   const handleClick = async (item) => {
     if (item === activeButton) return;
-    const videosResponse = await axios.get('http://localhost:3001/videos', {
+    const videosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
       params: {
         query: item === 'All' ? null : item,
       }
