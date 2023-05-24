@@ -66,7 +66,7 @@ const Feedback = ({ loadedUser, errorStatus }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3001/feedback', {
+      const response = await axios.post('https://youtubebackend.azurewebsites.net/feedback', {
         feedback: text,
         email: user.email
       });
@@ -104,7 +104,7 @@ export async function getServerSideProps(context) {
 
   if (context.req.cookies.token) {
     try {
-      const userResponse = await axios.get('http://localhost:3001/getUser', {
+      const userResponse = await axios.get('https://youtubebackend.azurewebsites.net/getUser', {
         params: {
           token: context.req.cookies.token
         }
