@@ -1,9 +1,9 @@
-import { Box, Card, CardContent, CardMedia, Stack, Typography, useMediaQuery } from '@mui/material';
-import { makeStyles } from "@mui/styles";
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { Box, Card, CardContent, CardMedia, Stack, Typography, useMediaQuery } from '@mui/material';
+import { makeStyles } from "@mui/styles";
 
 import { useMainContext } from '@/context/createMainContext';
 
@@ -104,6 +104,7 @@ const Trending = ({ loadedVideos, loadedSubscriptions, loadedUser, errorStatus }
   const [selected, setSelected] = useState("MUSIC");
   const [videos, setVideos] = useState(loadedVideos);
   const { handleSubscriptions, handleUser, drawer } = useMainContext();
+
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
 
   useEffect(() => {
@@ -195,7 +196,7 @@ export async function getServerSideProps(context) {
       });
       loadedUser = userResponse.data;
     } catch (error) {
-      errorStatus = error.response.data.message;
+      errorStatus = error.response.data.error;
     }
   }
 

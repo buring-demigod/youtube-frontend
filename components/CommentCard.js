@@ -1,6 +1,6 @@
-import { IconButton, Stack, Typography } from '@mui/material';
-import Image from 'next/image';
 import React from 'react';
+import Image from 'next/image';
+import { IconButton, Stack, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 //Icons

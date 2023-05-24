@@ -1,10 +1,11 @@
+import axios from 'axios';
 import React, { useEffect, useRef } from 'react';
 import { Stack, Box } from '@mui/material';
-import VideoCard from './VideoCard';
 import { makeStyles } from '@mui/styles';
-import { useMainContext } from '@/context/createMainContext';
-import axios from 'axios';
 import { debounce } from 'lodash';
+
+import { useMainContext } from '@/context/createMainContext';
+import VideoCard from './VideoCard';
 
 const useStyles = makeStyles((theme) => (
   {

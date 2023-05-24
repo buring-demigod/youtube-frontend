@@ -1,15 +1,14 @@
-import { Box, Icon, Stack, Typography, useMediaQuery } from '@mui/material'
+
 import React from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { makeStyles } from '@mui/styles';
+import { Box, Icon, Stack, Typography, useMediaQuery } from '@mui/material';
 
 //Icons
 import {
   HomeIcon, SubscriptionsIcon, VideoLibraryIcon, HistoryOutlinedIcon, SlideshowOutlinedIcon, WatchLaterOutlinedIcon, ThumbUpOutlinedIcon, WhatshotOutlinedIcon, LocalMallOutlinedIcon, MusicNoteOutlinedIcon, MovieOutlinedIcon, SettingsInputAntennaOutlinedIcon, SportsEsportsOutlinedIcon, NewspaperOutlinedIcon, EmojiEventsOutlinedIcon, LightbulbOutlinedIcon, CheckroomOutlinedIcon, SettingsOutlinedIcon, OutlinedFlagRoundedIcon, HelpOutlineOutlinedIcon, AnnouncementOutlinedIcon, HomeOutlinedIcon, VideoLibraryOutlinedIcon, SubscriptionsOutlinedIcon, WatchLaterIcon, ThumbUpIcon, WhatshotIcon, LocalMallIcon, MusicNoteIcon, MovieIcon, SettingsInputAntennaIcon, SportsEsportsIcon, NewspaperIcon, EmojiEventsIcon, LightbulbIcon, CheckroomIcon, PersonOutlinedIcon, FlagIcon, HelpIcon, AnnouncementIcon, PersonIcon, FacebookIcon, FacebookOutlinedIcon
 } from '../public/icons';
-
-import { useMainContext } from '@/context/createMainContext';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => (
   {
@@ -72,7 +71,7 @@ const useStyles = makeStyles((theme) => (
 const SidebarContent = ({ items, direction, spacing, typographyFont, contentSpacing, stackWidth }) => {
   const classes = useStyles();
   const router = useRouter();
-  const { drawerActive, handleDrawerActive } = useMainContext();
+  const { drawerActive, setDrawer, handleDrawerActive } = useMainContext();
 
   return (
     <Stack spacing={spacing || 0.2} alignItems="start" sx={{ marginLeft: '2px' }}>
@@ -86,7 +85,7 @@ const SidebarContent = ({ items, direction, spacing, typographyFont, contentSpac
           sx={{ backgroundColor: drawerActive === item.name ? 'rgba(184, 179, 179, 0.295)' : 'white', width: stackWidth || '190px' }}
           onClick={() => {
             handleDrawerActive(item.name);
-            // router.push(`${router.asPath}${item.targetPath}`);
+            setDrawer(false);
             router.push(`${item.targetPath}`);
           }
           }
@@ -107,8 +106,7 @@ const SidebarContent = ({ items, direction, spacing, typographyFont, contentSpac
 const SubscriptionContent = () => {
   const classes = useStyles();
   const router = useRouter();
-  const { subscriptions } = useMainContext();
-  const { drawerActive, handleDrawerActive } = useMainContext();
+  const { drawerActive, setDrawer, handleDrawerActive, subscriptions } = useMainContext();
 
   return (
     <Stack spacing={0.8} alignItems="start" sx={{ marginLeft: '2px' }}>
@@ -120,6 +118,7 @@ const SubscriptionContent = () => {
           alignItems="center"
           sx={{ backgroundColor: drawerActive === item.snippet.title ? 'rgba(184, 179, 179, 0.295)' : 'white', width: '190px' }} onClick={() => {
             handleDrawerActive(item.snippet.title);
+            setDrawer(false);
             router.push({ pathname: `/${item.snippet.resourceId.channelId}` });
           }}
         >
@@ -143,11 +142,10 @@ const SubscriptionContent = () => {
 const Drawer = () => {
   const classes = useStyles();
   const router = useRouter();
-  const { subscriptions } = useMainContext();
-  const { drawer } = useMainContext();
-  const aboveBreakPointD = useMediaQuery((theme) => theme.breakpoints.up('d'));
-
   const path = router.pathname;
+  const { subscriptions, drawer } = useMainContext();
+
+  const aboveBreakPointD = useMediaQuery((theme) => theme.breakpoints.up('d'));
 
   return (
     <>
@@ -196,10 +194,10 @@ const Drawer = () => {
               { name: 'Trending', icon: < WhatshotOutlinedIcon />, activeIcon: <WhatshotIcon />, targetPath: "/feed/trending" },
               { name: 'Shopping', icon: <LocalMallOutlinedIcon />, activeIcon: <LocalMallIcon />, targetPath: "/UCkYQyvc_i9hXEo4xic9Hh2g" },
               { name: 'Music', icon: <MusicNoteOutlinedIcon />, activeIcon: <MusicNoteIcon />, targetPath: "/UC-9-kyTW8ZkZNDHQJ6FgpwQ" },
-              { name: 'News', icon: <NewspaperOutlinedIcon />, activeIcon: <NewspaperIcon />, targetPath: 'UCYfdidRxbB8Qhf0Nx7ioOYw' },
-              { name: 'Sports', icon: <EmojiEventsOutlinedIcon />, activeIcon: <EmojiEventsIcon />, targetPath: 'UCEgdi0XIXXZ-qJOFPf4JSKw' },
-              { name: 'Learning', icon: <LightbulbOutlinedIcon />, activeIcon: <LightbulbIcon />, targetPath: 'UCtFRv9O2AHqOZjjynzrv-xg' },
-              { name: 'Fashion & Beauty', icon: <CheckroomOutlinedIcon />, activeIcon: <CheckroomIcon />, targetPath: 'UCrpQ4p1Ql_hG8rKXIKM1MOQ' }
+              { name: 'News', icon: <NewspaperOutlinedIcon />, activeIcon: <NewspaperIcon />, targetPath: '/UCYfdidRxbB8Qhf0Nx7ioOYw' },
+              { name: 'Sports', icon: <EmojiEventsOutlinedIcon />, activeIcon: <EmojiEventsIcon />, targetPath: '/UCEgdi0XIXXZ-qJOFPf4JSKw' },
+              { name: 'Learning', icon: <LightbulbOutlinedIcon />, activeIcon: <LightbulbIcon />, targetPath: '/UCtFRv9O2AHqOZjjynzrv-xg' },
+              { name: 'Fashion & Beauty', icon: <CheckroomOutlinedIcon />, activeIcon: <CheckroomIcon />, targetPath: '/UCrpQ4p1Ql_hG8rKXIKM1MOQ' }
             ]}
           />
         </Stack>

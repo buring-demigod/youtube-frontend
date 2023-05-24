@@ -1,12 +1,12 @@
+import axios from 'axios';
+import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 import { makeStyles } from '@mui/styles';
 import { Box, Stack, useMediaQuery } from '@mui/material';
-import Player from '@/components/Player';
-import Recommended from '@/components/Recommended';
-import { useMainContext } from '@/context/createMainContext';
-import { useEffect, useRef } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/router';
 import { debounce } from 'lodash';
+
+import { Player, Recommended } from '../../components/index';
+import { useMainContext } from '@/context/createMainContext';
 
 const useStyles = makeStyles((theme) => (
   {
@@ -39,9 +39,9 @@ const Index = ({ loadedVideos, nextPageToken, loadedComments, nextCPageToken }) 
   const router = useRouter();
   const { v } = router.query;
   const ref = useRef(null);
+  const { videos, handleVideos, setVideoToken, nextVideoPageToken, comments, handleComments, setCommentToken, nextCommentPageToken, setDrawer, drawer } = useMainContext();
 
   const aboveBreakPointK = useMediaQuery((theme) => theme.breakpoints.up('k'));
-  const { videos, handleVideos, setVideoToken, nextVideoPageToken, comments, handleComments, setCommentToken, nextCommentPageToken, setDrawer, drawer } = useMainContext();
 
   useEffect(() => {
     setDrawer(false);
@@ -114,7 +114,7 @@ export async function getServerSideProps(context) {
       }
     });
     loadedVideos = videosResponse.data.videos;
-    nextPageToken = videosResponse.data.nextPageToken;
+    nextPageToken = videosResponse.data.nextPageToken || null;
   } catch (error) {
     loadedVideos = [];
   }
@@ -126,7 +126,7 @@ export async function getServerSideProps(context) {
       }
     });
     loadedComments = response.data.items;
-    nextCPageToken = response.data.nextPageToken;
+    nextCPageToken = response.data.nextPageToken || null;
   } catch (error) {
     loadedComments = [];
   }

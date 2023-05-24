@@ -1,4 +1,7 @@
-import React, { useEffect, useRef } from 'react'
+import axios from 'axios';
+import React, { useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
+import { debounce } from 'lodash';
 import { Box, IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
 import { makeStyles } from '@mui/styles';
 
@@ -6,9 +9,7 @@ import { makeStyles } from '@mui/styles';
 import TuneIcon from '@mui/icons-material/Tune';
 import VideoCard from '@/components/VideoCard';
 import { useMainContext } from '@/context/createMainContext';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import { debounce } from 'lodash';
+
 
 const useStyles = makeStyles((theme) => (
   {
@@ -66,7 +67,6 @@ const Index = ({ loadedVideos, nextPageToken }) => {
   const { search_query } = router.query;
   const { videos, handleVideos, setVideoToken, nextVideoPageToken, drawer } = useMainContext();
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
-  console.log(videos)
 
   useEffect(() => {
     handleVideos(loadedVideos);
@@ -75,7 +75,6 @@ const Index = ({ loadedVideos, nextPageToken }) => {
 
   const handleScroll = debounce(async () => {
     const { scrollTop, clientHeight, scrollHeight } = ref.current;
-    console.log(scrollTop, clientHeight, scrollHeight)
     if (scrollTop + clientHeight >= scrollHeight - 100) {
       const nextPageVideoResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
         params: {

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import { makeStyles } from '@mui/styles';
+import { AppBar, Box, Stack, Toolbar, IconButton, Typography, Icon, useMediaQuery } from '@mui/material'
 
 //Icons 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -11,9 +13,7 @@ import VideoCallIcon from '@mui/icons-material/VideoCall';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import { AppBar, Box, Stack, Toolbar, IconButton, Typography, Icon, useMediaQuery } from '@mui/material'
 import { useMainContext } from '@/context/createMainContext';
-import Image from 'next/image';
 
 //CSS Styles 
 const useStyles =
@@ -119,6 +119,7 @@ const useStyles =
 const NavMain = () => {
   const router = useRouter();
   const { handleDrawer } = useMainContext();
+
   const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
   return (
     <Stack direction="row" spacing={0.8} alignItems="center">
@@ -134,13 +135,14 @@ const NavMain = () => {
 }
 
 const NavSearch = ({ inputStyles, IconStyles, handleOpen }) => {
-
+  const classes = useStyles();
+  const router = useRouter();
   const [searchValue, setSearchValue] = useState('');
   const [transcript, setTranscript] = useState('');
+  const { handleVideos } = useMainContext();
+
   const belowBreakPointI = useMediaQuery((theme) => theme.breakpoints.down('i'));
   const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
-  const router = useRouter();
-  const { handleVideos } = useMainContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -157,13 +159,11 @@ const NavSearch = ({ inputStyles, IconStyles, handleOpen }) => {
     recognition.onresult = (event) => {
 
       const transcript = event.results[0][0].transcript;
-      console.log(transcript);
     };
 
     recognition.start();
   }
 
-  const classes = useStyles();
   return (
     <Stack direction="row" spacing={0.8} alignItems="center" >
       <div className={classes.searchwrapper} >
@@ -191,8 +191,9 @@ const NavSearch = ({ inputStyles, IconStyles, handleOpen }) => {
 }
 
 const NavEnd = () => {
-  const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
   const { user, handleSignUp } = useMainContext();
+
+  const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
@@ -209,6 +210,7 @@ const NavEnd = () => {
 
 const SmNavSearch = ({ handleClose }) => {
   const classes = useStyles();
+
   const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
 
   return (
@@ -226,6 +228,7 @@ const SmNavSearch = ({ handleClose }) => {
 const Navbar = () => {
   const classes = useStyles();
   const [searchOpen, setSearchOpen] = useState(false);
+
   const belowBreakPointI = useMediaQuery((theme) => theme.breakpoints.down('i'));
 
   const handleClose = () => {

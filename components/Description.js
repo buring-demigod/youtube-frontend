@@ -1,9 +1,9 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import { Box, IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-// import useMediaQuery from '@mui/material';
-
 
 //Icons
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
@@ -11,8 +11,6 @@ import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 import ContentCutOutlinedIcon from '@mui/icons-material/ContentCutOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-import { useRouter } from "next/router";
-import axios from "axios";
 import formatNumber from "@/utils/functions/formatNumber";
 import formatTime from "@/utils/functions/formatTime";
 
@@ -76,14 +74,15 @@ const useStyles = makeStyles((theme) => (
 const Description = () => {
   const classes = useStyles();
   const router = useRouter();
-  const belowBreakPointF = useMediaQuery((theme) => theme.breakpoints.down('f'));
-  const belowBreakPointK = useMediaQuery((theme) => theme.breakpoints.down('k'));
-  const aboveBreakPointI = useMediaQuery((theme) => theme.breakpoints.up('i'));
-
   const { v } = router.query;
+
   const [video, setVideo] = useState(null);
   const [channel, setChannel] = useState(null);
   const [showMore, setShowMore] = useState(false);
+
+  const belowBreakPointF = useMediaQuery((theme) => theme.breakpoints.down('f'));
+  const belowBreakPointK = useMediaQuery((theme) => theme.breakpoints.down('k'));
+  const aboveBreakPointI = useMediaQuery((theme) => theme.breakpoints.up('i'));
 
   useEffect(() => {
     const getData = async () => {
@@ -109,6 +108,10 @@ const Description = () => {
     }
   }, [v])
 
+  const handleChannelClick = () => {
+    router.push(`/${video.snippet.channelId}`)
+  }
+
 
   return (
     video && channel &&
@@ -120,6 +123,7 @@ const Description = () => {
             className={classes.channelDisplay}
             alt="Channel Profile Picture"
             src={channel.snippet.thumbnails.high.url}
+            onClick={handleChannelClick}
             width={40}
             height={40}
           />

@@ -1,8 +1,9 @@
-import { Box, Card, CardContent, CardMedia, Stack, Typography } from '@mui/material';
+
 import React from 'react';
-import { makeStyles } from "@mui/styles";
-import VideoCard from './VideoCard';
 import { useRouter } from 'next/router';
+import { Box, Card, CardContent, CardMedia, Stack, Typography } from '@mui/material';
+import { makeStyles } from "@mui/styles";
+
 import formatTime from '@/utils/functions/formatTime';
 import { useMainContext } from '@/context/createMainContext';
 
@@ -12,18 +13,29 @@ const useStyles = makeStyles((theme) => (
       width: 370,
       height: 500,
       padding: '14px 14px',
+      [theme.breakpoints.down('md')]: {
+        width: 180,
+        height: 250
+      },
+      [theme.breakpoints.down('sm')]: {
+        display: 'none'
+      },
     },
     card: {
       border: 'none !important',
       boxShadow: 'none !important',
       cursor: 'pointer',
       height: '500px',
-      backgroundColor: 'darkgray'
+      backgroundColor: 'darkgray',
     },
     media: {
       width: 360,
       height: 275,
-      objectFit: 'contain'
+      objectFit: 'contain',
+      [theme.breakpoints.down('md')]: {
+        width: 180,
+        height: 250
+      }
     },
     content: {
       width: 360,
@@ -50,6 +62,7 @@ const useStyles = makeStyles((theme) => (
       height: 'calc(100vh - 105px)',
       marginTop: '35px',
       overflowY: 'scroll',
+      overflowX: 'hidden',
       '&::-webkit-scrollbar': {
         width: '7px',
         height: '5px',

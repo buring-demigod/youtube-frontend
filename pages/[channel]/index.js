@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Box, Stack, Typography, useMediaQuery } from '@mui/material';
-import { makeStyles } from "@mui/styles";
-import { useMainContext } from '@/context/createMainContext';
-import Banner from '@/components/Banner';
-import ChannelContent from '@/components/ChannelContent';
-import { useRouter } from 'next/router';
 import axios from 'axios';
-import ChannelDetails from '@/components/ChannelDetails';
+import { useEffect, useState } from 'react';
+import { Box, Stack, useMediaQuery } from '@mui/material';
+import { makeStyles } from "@mui/styles";
+
+import { useMainContext } from '@/context/createMainContext';
+import { Banner, ChannelContent, ChannelDetails } from '../../components/index'
 import HandleTokenExpire from '@/utils/functions/handleTokenExpire';
 
 
@@ -25,6 +23,9 @@ const useStyles = makeStyles((theme) => (
       '&::-webkit-scrollbar-thumb': {
         background: 'gray',
         borderRadius: '5px',
+      },
+      [theme.breakpoints.down('g')]: {
+        marginLeft: '0px !important'
       }
     },
     box: {
@@ -59,13 +60,13 @@ const useStyles = makeStyles((theme) => (
 
 const Index = ({ loadedChannel, loadedChannelVideos, loadedPopularVideos, loadedPlaylists, loadedSubscriptions, loadedUser, errorStatus }) => {
   const classes = useStyles();
-
   const [channelInfo, setChannelInfo] = useState(loadedChannel);
   const [channelVideos, setChannelVideos] = useState(loadedChannelVideos);
   const [popularVideos, setPopularVideos] = useState(loadedPopularVideos);
   const [playlists, setPlaylists] = useState(loadedPlaylists);
   const [channelSet, setChannelSet] = useState('HOME');
   const { handleSubscriptions, handleUser, drawer } = useMainContext();
+
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
   const belowBreakPointG = useMediaQuery((theme) => theme.breakpoints.down('g'));
 
@@ -89,7 +90,7 @@ const Index = ({ loadedChannel, loadedChannelVideos, loadedPopularVideos, loaded
   return (
     channelInfo &&
     <Box className={classes.entireBox}>
-      <Stack spacing={2} alignItems="center" sx={{ width: belowBreakPointG ? '100vw' : drawer ? 'calc(100vw - 270px)' : 'calc(100vw - 120px)' }}>
+      <Stack spacing={2} alignItems="center" sx={{ width: belowBreakPointG ? '100vw' : belowBreakPointD ? 'calc(100vw - 120px)' : drawer ? 'calc(100vw - 270px)' : 'calc(100vw - 120px)' }}>
         {channelInfo.brandingSettings.image &&
           <Box
             className={classes.box}
@@ -150,7 +151,7 @@ export async function getServerSideProps(context) {
       }
     });
 
-    loadedChannelVideos = channelVideosResponse.data;
+    loadedChannelVideos = channelVideosResponse.data.videos;
 
     const popularVideosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
       params: {
@@ -159,7 +160,7 @@ export async function getServerSideProps(context) {
       }
     });
 
-    loadedPopularVideos = popularVideosResponse.data;
+    loadedPopularVideos = popularVideosResponse.data.videos;
 
     const playlistsResponse = await axios.get('https://youtubebackend.azurewebsites.net/playlist', {
       params: {

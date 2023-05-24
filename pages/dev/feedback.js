@@ -1,14 +1,18 @@
-import { useMainContext } from '@/context/createMainContext'
-import { Box, Stack, Typography, useMediaQuery } from '@mui/material'
-import { makeStyles } from '@mui/styles'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Box, Stack, Typography, useMediaQuery } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+import { useMainContext } from '@/context/createMainContext';
 
 const useStyles = makeStyles((theme) => (
   {
     box: {
       display: 'flex',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      [theme.breakpoints.down('m')]: {
+        marginLeft: '62px'
+      }
     },
     stack: {
       width: '400px',
@@ -46,6 +50,7 @@ const Feedback = ({ loadedUser, errorStatus }) => {
   const classes = useStyles();
   const [text, setText] = useState('');
   const { user, handleUser, drawer } = useMainContext();
+
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
 
   useEffect(() => {

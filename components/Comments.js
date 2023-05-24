@@ -1,13 +1,13 @@
-import { IconButton, Stack, Typography, useMediaQuery } from '@mui/material';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
-
-import SortIcon from '@mui/icons-material/Sort';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { IconButton, Stack, Typography, useMediaQuery } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import SortIcon from '@mui/icons-material/Sort';
+
 import CommentCard from './CommentCard';
 import { useMainContext } from '@/context/createMainContext';
-import { useRouter } from 'next/router';
-import axios from 'axios';
 import formatNumber from '@/utils/functions/formatNumber';
 
 const useStyles = makeStyles((theme) => (
@@ -39,6 +39,8 @@ const Comments = () => {
   const [video, setVideo] = useState(null);
   const { comments } = useMainContext();
 
+  const belowBreakPointK = useMediaQuery((theme) => theme.breakpoints.down('k'));
+
   useEffect(() => {
     const getData = async () => {
       const videoResponse = await axios.get('https://youtubebackend.azurewebsites.net/video', {
@@ -55,10 +57,6 @@ const Comments = () => {
       getData();
     }
   }, [v])
-
-
-
-  const belowBreakPointK = useMediaQuery((theme) => theme.breakpoints.down('k'));
 
   return (
     comments.length > 0 && video &&

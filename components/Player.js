@@ -1,18 +1,15 @@
-import { IconButton, Stack, useMediaQuery } from "@mui/material"
-import ReactPlayer from "react-player"
-
-//Icons
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { makeStyles } from "@mui/styles";
+import { IconButton, Stack, useMediaQuery } from "@mui/material";
+import ReactPlayer from "react-player";
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
-import { makeStyles } from "@mui/styles";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+
 import Description from "./Description";
 import Comments from "./Comments";
-
-
 
 const useStyles = makeStyles((theme) => (
   {
@@ -44,6 +41,9 @@ const useStyles = makeStyles((theme) => (
       },
       [theme.breakpoints.down('j')]: {
         height: '350px'
+      },
+      [theme.breakpoints.down('sm')]: {
+        width: '100vw'
       }
     },
     pauseIcon: {
@@ -60,13 +60,13 @@ const useStyles = makeStyles((theme) => (
 const Player = () => {
   const classes = useStyles();
   const router = useRouter();
-
   const { v } = router.query;
-  const aboveBreakPointK = useMediaQuery((theme) => theme.breakpoints.up('k'));
 
   const [play, setPlay] = useState(false);
   const [hasWindow, setHasWindow] = useState(false);
   const [mute, setMute] = useState(false);
+
+  const aboveBreakPointK = useMediaQuery((theme) => theme.breakpoints.up('k'));
 
   useEffect(() => {
     if (typeof window !== "undefined") {

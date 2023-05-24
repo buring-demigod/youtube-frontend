@@ -22,7 +22,8 @@ let theme = createTheme({
       k: 1020,
       j: 810,
       l: 455,
-      m: 485
+      m: 485,
+      n: 560
     },
   },
 });

@@ -1,11 +1,10 @@
-import { Stack, useMediaQuery } from "@mui/material";
-import Slider from "@/components/Slider";
-import Feed from "@/components/Feed";
-import { useState } from "react";
-import { makeStyles } from "@mui/styles";
-import { useMainContext } from "@/context/createMainContext";
-import { useEffect } from "react";
 import axios from "axios";
+import { useState, useEffect } from "react";
+import { Stack, useMediaQuery } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+
+import { useMainContext } from "@/context/createMainContext";
+import { Slider, Feed } from '../components/index';
 import HandleTokenExpire from "@/utils/functions/handleTokenExpire";
 
 const useStyles = makeStyles((theme) => (
@@ -21,8 +20,9 @@ const useStyles = makeStyles((theme) => (
 
 const Home = ({ loadedVideos, loadedSubscriptions, loadedUser, nextPageToken, errorStatus }) => {
   const classes = useStyles();
-  const [activeButton, setActiveButton] = useState('All');
   const { handleVideos, handleSubscriptions, handleUser, drawer, setVideoToken } = useMainContext();
+  const [activeButton, setActiveButton] = useState('All');
+
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
 
   useEffect(() => {
@@ -37,14 +37,16 @@ const Home = ({ loadedVideos, loadedSubscriptions, loadedUser, nextPageToken, er
 
   const handleClick = async (item) => {
     if (item === activeButton) return;
+
     const videosResponse = await axios.get('https://youtubebackend.azurewebsites.net/videos', {
       params: {
         query: item === 'All' ? null : item,
       }
     });
+
     setActiveButton(item);
-    setVideoToken(videosResponse.data.nextPageToken);
     handleVideos(videosResponse.data.videos);
+    setVideoToken(videosResponse.data.nextPageToken);
   }
 
   return (

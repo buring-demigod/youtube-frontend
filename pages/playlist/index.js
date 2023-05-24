@@ -1,12 +1,10 @@
-import Drawer from '@/components/Drawer';
-import { useMainContext } from '@/context/createMainContext';
-import { Stack, Typography, useMediaQuery } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Stack, Typography, useMediaQuery } from '@mui/material';
 import { makeStyles } from "@mui/styles";
+
 import Playlist from '@/components/Playlist';
-import HandleTokenExpire from '@/utils/functions/handleTokenExpire';
-import { useRouter } from 'next/router';
+import { useMainContext } from '@/context/createMainContext';
 
 const useStyles = makeStyles((theme) => (
   {
@@ -22,11 +20,10 @@ const useStyles = makeStyles((theme) => (
 const Index = ({ loadedPlaylistVideos, loadedUser, loadedSubscriptions, errorStatus }) => {
   const classes = useStyles();
   const [playlist, setPlaylist] = useState(loadedPlaylistVideos);
-
   const { drawer, handleUser, handleSubscriptions } = useMainContext();
+
   const belowBreakPointD = useMediaQuery((theme) => theme.breakpoints.down('d'));
 
-  console.log(playlist);
   useEffect(() => {
     handleUser(loadedUser);
     handleSubscriptions(loadedSubscriptions);

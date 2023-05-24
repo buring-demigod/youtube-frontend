@@ -1,20 +1,21 @@
-import { useState } from 'react';
-import mainContext from "./createMainContext";
 import axios from "axios";
+import { useState } from 'react';
 import { useRouter } from "next/router";
 import Cookies from 'js-cookie';
-import { useMediaQuery } from '@mui/material';
+
+import mainContext from "./createMainContext";
 
 const MainContextProvider = ({ children }) => {
   const router = useRouter();
   const [user, setUser] = useState({ name: '', email: '', picture: '' });
-  const [subscriptions, setSubscriptions] = useState(null);
   const [videos, setVideos] = useState([]);
-  const [nextVideoPageToken, setnextVideoPageToken] = useState(null);
   const [comments, setComments] = useState([]);
+  const [subscriptions, setSubscriptions] = useState(null);
+  const [nextVideoPageToken, setnextVideoPageToken] = useState(null);
   const [nextCommentPageToken, setnextCommentPageToken] = useState(null);
   const [drawerActive, setDrawerActive] = useState('Home');
   const [drawer, setDrawer] = useState(false);
+
 
   const handleUser = (item) => {
     setUser(item);
@@ -56,7 +57,7 @@ const MainContextProvider = ({ children }) => {
       const { name, email, picture } = userInfo.data;
       setUser({ name, email, picture });
 
-      const tokenInfo = await axios.post('https://youtubebackend.azurewebsites.net/createuser', {
+      const tokenInfo = await axios.post('http://localhost:3001/createuser', {
         name,
         email,
         picture,
@@ -71,7 +72,7 @@ const MainContextProvider = ({ children }) => {
 
     /* global google*/
     const client = google.accounts.oauth2.initTokenClient({
-      client_id: '582680695815-9hsi3h7ff9qla29fg59dnv9g9kscfg02.apps.googleusercontent.com',
+      client_id: '842216765313-3j5dhjfuu8cjnfbfld6grgu73h778oq5.apps.googleusercontent.com',
       scope: 'https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
       ux_mode: 'popup',
       callback: GetData

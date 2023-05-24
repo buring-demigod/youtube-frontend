@@ -1,8 +1,9 @@
-import { Card, CardContent, CardMedia, Icon, Stack, Typography, useMediaQuery } from "@mui/material";
-import { makeStyles } from '@mui/styles';
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { Card, CardContent, CardMedia, Icon, Stack, Typography, useMediaQuery } from "@mui/material";
+import { makeStyles } from '@mui/styles';
 import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
+
 import { useMainContext } from "@/context/createMainContext";
 import formatNumber from "@/utils/functions/formatNumber";
 import formatTime from "@/utils/functions/formatTime";
@@ -78,6 +79,10 @@ const useStyles = makeStyles((theme) => (
       [theme.breakpoints.down('sm')]: {
         width: '225px',
         height: '125px'
+      },
+      [theme.breakpoints.down('n')]: {
+        width: '200px',
+        height: '115px'
       }
     },
     searchcontent: {
@@ -92,6 +97,9 @@ const useStyles = makeStyles((theme) => (
       },
       [theme.breakpoints.down('sm')]: {
         width: 'calc(100% - 267px)'
+      },
+      [theme.breakpoints.down('n')]: {
+        width: '100%'
       }
     },
     searchimage: {
@@ -227,7 +235,9 @@ const SliderVideoCard = ({ thumbnail, title, time, views, videoId, handleClick }
 
 const RelatedCard = ({ thumbnail, title, time, channelTitle, views, videoId, handleClick }) => {
   const classes = useStyles();
+
   const belowBreakPointK = useMediaQuery((theme) => theme.breakpoints.down('k'));
+  const belowBreakPointSm = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   return (
     <Card className={classes.relatedCard} onClick={() => handleClick(videoId)} >
@@ -240,7 +250,7 @@ const RelatedCard = ({ thumbnail, title, time, channelTitle, views, videoId, han
       <CardContent className={classes.relatedContent} >
         <Stack spacing={1} alignItems='start'>
           <Stack sx={{ width: '100%' }}>
-            <Typography fontSize={13} fontWeight={500} >{(belowBreakPointK && title.slice(0, 80)) || title.slice(0, 50)}{(belowBreakPointK && title.length >= 77 && '...') || title.length >= 47 && '...'}</Typography>
+            <Typography fontSize={13} fontWeight={500} >{(belowBreakPointSm && title.slice(0, 45)) || (belowBreakPointK && title.slice(0, 80)) || title.slice(0, 50)}{(belowBreakPointK && title.length >= 77 && '...') || title.length >= 47 && '...'}</Typography>
           </Stack>
           <Stack sx={{ width: '100%' }} alignItems="start">
             <Typography fontSize={12} sx={{ color: 'gray' }} >{channelTitle}</Typography>
@@ -255,7 +265,11 @@ const RelatedCard = ({ thumbnail, title, time, channelTitle, views, videoId, han
 
 const SearchCard = ({ thumbnail, channelDisplay, title, time, description, channelTitle, views, videoId, channelId, handleClick, handleChannelClick }) => {
   const classes = useStyles();
+
   const belowBreakPointI = useMediaQuery((theme) => theme.breakpoints.down('i'));
+  const belowBreakPointN = useMediaQuery((theme) => theme.breakpoints.down('n'));
+  const belowBreakPointM = useMediaQuery((theme) => theme.breakpoints.down('m'));
+  const belowBreakPointL = useMediaQuery((theme) => theme.breakpoints.down('l'));
 
   return (
     <Card className={classes.searchcard}  >
@@ -267,10 +281,10 @@ const SearchCard = ({ thumbnail, channelDisplay, title, time, description, chann
         title={title}
       />
       <CardContent className={classes.searchcontent} >
-        <Stack spacing={2} alignItems='start'>
+        <Stack spacing={1} alignItems='start'>
           <Stack sx={{ width: '100%' }}>
-            <Typography fontSize={18} >{(belowBreakPointI && title.slice(0, 30)) || title.slice(0, 57)}{title.length >= 30 && '...'}</Typography>
-            <Typography fontSize={12} sx={{ color: 'gray' }} >{formatNumber(views)} .  {formatTime(time)}</Typography>
+            <Typography fontSize={belowBreakPointL && 12 || belowBreakPointN && 15 || 18} >{(belowBreakPointL && title.slice(0, 45)) || (belowBreakPointI && title.slice(0, 30)) || title.slice(0, 57)}{title.length >= 30 && '...'}</Typography>
+            <Typography fontSize={belowBreakPointN && 11 || 12} sx={{ color: 'gray' }} >{formatNumber(views)} .  {formatTime(time)}</Typography>
           </Stack>
           <Stack sx={{ width: '100%' }} direction="row" alignItems="center">
             <Image
@@ -278,13 +292,13 @@ const SearchCard = ({ thumbnail, channelDisplay, title, time, description, chann
               className={classes.searchimage}
               onClick={() => handleChannelClick(channelId)}
               alt='channel profile picture'
-              width={30}
-              height={30}
+              width={belowBreakPointN && 25 || 30}
+              height={belowBreakPointN && 25 || 30}
             />
             <Typography fontSize={12} sx={{ color: 'gray', paddingLeft: '8px' }} >{channelTitle}</Typography>
           </Stack>
           <Stack sx={{ width: '100%' }}>
-            <Typography fontSize={11} sx={{ wordWrap: 'break-word' }}>{(belowBreakPointI && description.slice(0, 90)) || description.slice(0, 150)}{description.length > 90 && '...'}</Typography>
+            <Typography fontSize={11} sx={{ wordWrap: 'break-word', display: belowBreakPointL && 'none' }}>{(belowBreakPointM && description.slice(0, 60)) || (belowBreakPointI && description.slice(0, 90)) || description.slice(0, 150)}{description.length > 90 && '...'}</Typography>
           </Stack>
         </Stack>
       </CardContent>

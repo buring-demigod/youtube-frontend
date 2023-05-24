@@ -1,9 +1,11 @@
-import { useMainContext } from '@/context/createMainContext';
 import { Box, IconButton, Stack, Typography, useMediaQuery } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Image from 'next/image';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+
+import { useMainContext } from '@/context/createMainContext';
+
 
 const useStyles = makeStyles((theme) => (
   {

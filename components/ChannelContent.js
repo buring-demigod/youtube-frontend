@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from "@mui/styles";
 import { Box, Stack, Typography } from '@mui/material';
+
 import VideoCard from './VideoCard';
 
 const useStyles = makeStyles((theme) => (
@@ -169,7 +170,6 @@ const PlaylistSlider = ({ items, videoLeftId, videoRightId }) => {
 
 const ChannelContent = ({ recentVideos, popularVideos, playlists }) => {
   const classes = useStyles();
-  console.log(popularVideos);
 
   return (
     <Stack className={classes.stack}>

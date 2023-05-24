@@ -1,7 +1,9 @@
-import { IconButton, Stack, Typography } from '@mui/material'
 import React from 'react';
-import { makeStyles } from "@mui/styles";
 import Image from 'next/image';
+import { IconButton, Stack, Typography, useMediaQuery } from '@mui/material'
+import { makeStyles } from "@mui/styles";
+
+import formatNumber from '@/utils/functions/formatNumber';
 
 const useStyles = makeStyles((theme) => (
   {
@@ -19,6 +21,9 @@ const useStyles = makeStyles((theme) => (
       borderRadius: '14px',
       [theme.breakpoints.down('m')]: {
         width: '45px'
+      },
+      [theme.breakpoints.down('i')]: {
+        width: '75px'
       }
     },
     subscribe: {
@@ -30,8 +35,8 @@ const useStyles = makeStyles((theme) => (
       color: 'black',
       backgroundColor: 'white',
       border: '1px solid black',
-      [theme.breakpoints.down('m')]: {
-        width: '30px'
+      [theme.breakpoints.down('n')]: {
+        width: '45px'
       }
     },
     sections: {
@@ -48,21 +53,25 @@ const useStyles = makeStyles((theme) => (
 
 const ChannelDetails = ({ image, title, subscribers, videoCount, description, active, handleSectionChange }) => {
   const classes = useStyles();
+
+  const belowBreakPointI = useMediaQuery((theme) => theme.breakpoints.down('i'));
+  const belowBreakPointN = useMediaQuery((theme) => theme.breakpoints.down('n'));
+
   return (
     <Stack className={classes.stack} justifyContent="space-between">
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" spacing={2}>
           <Image
             src={image}
-            height={128}
-            width={128}
+            height={belowBreakPointN && 75 || belowBreakPointI && 100 || 128}
+            width={belowBreakPointN && 75 || belowBreakPointI && 100 || 128}
             style={{ borderRadius: '50%' }}
             alt='thumbnail'
           />
           <Stack spacing={0.5} alignItems="start" justifyContent="center">
-            <Typography fontSize={24} fontWeight={400}>{title}</Typography>
-            <Typography fontSize={11} color="gray">@{title} {subscribers} subscribers {videoCount}videos</Typography>
-            <Typography fontSize={14} color="gray">{description.slice(0, 70)}</Typography>
+            <Typography fontSize={belowBreakPointI && 19 || belowBreakPointN && 15 || 24} fontWeight={400}>{title}</Typography>
+            <Typography fontSize={11} color="gray">@{title} {formatNumber(subscribers)} subscribers {videoCount}videos</Typography>
+            <Typography fontSize={belowBreakPointI && 12 || 14} color="gray" sx={{ display: belowBreakPointN && 'none' }}>{description.slice(0, 70)}</Typography>
           </Stack>
         </Stack>
         <Stack spacing={2} direction="row">
@@ -72,7 +81,7 @@ const ChannelDetails = ({ image, title, subscribers, videoCount, description, ac
       </Stack>
       <Stack direction="row" spacing={4} >
         {
-          ['HOME', 'VIDEO', 'LIVE', 'PLAYLIST', 'CHANNELS', 'ABOUT'].map((item, index) => {
+          ['HOME', 'VIDEO', 'ABOUT'].map((item, index) => {
             return (
               <Typography key={index} className={classes.sections} sx={{ borderBottom: item === active && '1px solid gray', fontWeight: item === active && '500' }} onClick={() => handleSectionChange(item)}>
                 {item}

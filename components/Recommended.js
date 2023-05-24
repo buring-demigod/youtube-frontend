@@ -1,11 +1,11 @@
-import { Box, Stack, useMediaQuery } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import Slider from './Slider';
-import { makeStyles } from '@mui/styles';
-import VideoCard from './VideoCard';
-import Comments from './Comments';
-import { useMainContext } from '@/context/createMainContext';
 import axios from 'axios';
+import React, { useState } from 'react';
+import { Box, Stack } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+import { VideoCard, Slider, Comments } from './index'
+import { useMainContext } from '@/context/createMainContext';
+
 
 const useStyle = makeStyles((theme) => (
   {
@@ -14,8 +14,16 @@ const useStyle = makeStyles((theme) => (
       [theme.breakpoints.down('k')]: {
         width: '94vw',
         paddingLeft: '28px'
+      },
+      [theme.breakpoints.down('sm')]: {
+        paddingLeft: '20px'
+      },
+      [theme.breakpoints.down('m')]: {
+        paddingLeft: '16px'
+      },
+      [theme.breakpoints.down('l')]: {
+        paddingLeft: '14px'
       }
-
     }
   }
 ));
@@ -23,8 +31,8 @@ const useStyle = makeStyles((theme) => (
 
 const Recommended = () => {
   const classes = useStyle();
-  const { videos, handleVideos, setVideoToken } = useMainContext();
   const [activeButton, setActiveButton] = useState('All');
+  const { videos, handleVideos, setVideoToken } = useMainContext();
 
   const handleClick = async (item) => {
     if (item === activeButton) return;
