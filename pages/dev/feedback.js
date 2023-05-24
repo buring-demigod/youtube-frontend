@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => (
       display: 'flex',
       justifyContent: 'center',
       [theme.breakpoints.down('m')]: {
-        marginLeft: '62px'
+        marginLeft: '62px !important'
       }
     },
     stack: {
